@@ -1,0 +1,62 @@
+
+controlui.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+contorno1280
+  rotate: false
+  xy: 0, 84
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+contorno1024
+  rotate: false
+  xy: 160, 115
+  size: 129, 129
+  orig: 129, 129
+  offset: 0, 0
+  index: -1
+contorno800
+  rotate: false
+  xy: 289, 143
+  size: 101, 101
+  orig: 101, 101
+  offset: 0, 0
+  index: -1
+boton1280
+  rotate: false
+  xy: 0, 0
+  size: 84, 84
+  orig: 84, 84
+  offset: 0, 0
+  index: -1
+boton1024
+  rotate: false
+  xy: 390, 177
+  size: 67, 67
+  orig: 67, 67
+  offset: 0, 0
+  index: -1
+boton800
+  rotate: false
+  xy: 84, 31
+  size: 53, 53
+  orig: 53, 53
+  offset: 0, 0
+  index: -1
+sliderback800
+  rotate: false
+  xy: 160, 90
+  size: 25, 25
+  split: 10, 10, 10, 10
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+sliderknob800
+  rotate: false
+  xy: 289, 118
+  size: 15, 25
+  orig: 15, 25
+  offset: 0, 0
+  index: -1

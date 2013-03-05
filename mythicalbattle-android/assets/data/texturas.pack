@@ -1,0 +1,26 @@
+
+texturas.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+torre
+  rotate: false
+  xy: 1, 73
+  size: 200, 377
+  orig: 200, 377
+  offset: 0, 0
+  index: -1
+ficha
+  rotate: false
+  xy: 203, 250
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+loseta
+  rotate: false
+  xy: 1, 1
+  size: 100, 70
+  orig: 100, 70
+  offset: 0, 0
+  index: -1

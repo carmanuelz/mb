@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RowText" parent="@android:style/TextAppearance.Medium">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
+    <style name="RowText.Edad">
+        <item name="android:textSize">32dp</item>
+        <item name="android:layout_width">64dp</item>
+        <item name="android:padding">3dp</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+    
+    <style name="RowText.Nombre">
+        <item name="android:textSize">20dp</item>
+    </style>
+    
+    <style name="RowText.Apellidos">
+        <item name="android:textSize">14dp</item>
+    </style>
+
+</resources>

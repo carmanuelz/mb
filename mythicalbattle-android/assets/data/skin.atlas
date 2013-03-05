@@ -1,0 +1,68 @@
+
+skin.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+calibri
+  rotate: false
+  xy: 0, 140
+  size: 256, 256
+  orig: 256, 256
+  offset: 0, 0
+  index: -1
+tab_down
+  rotate: false
+  xy: 0, 98
+  size: 312, 41
+  orig: 312, 41
+  offset: 0, 0
+  index: -1
+tab_up
+  rotate: false
+  xy: 0, 56
+  size: 312, 41
+  orig: 312, 41
+  offset: 0, 0
+  index: -1
+default-windows
+  rotate: false
+  xy: 257, 302
+  size: 109, 94
+  orig: 109, 94
+  offset: 0, 0
+  index: -1
+check_on
+  rotate: false
+  xy: 0, 26
+  size: 35, 29
+  orig: 35, 29
+  offset: 0, 0
+  index: -1
+check_of
+  rotate: false
+  xy: 257, 272
+  size: 34, 29
+  orig: 34, 29
+  offset: 0, 0
+  index: -1
+button_down
+  rotate: false
+  xy: 367, 371
+  size: 19, 25
+  orig: 19, 25
+  offset: 0, 0
+  index: -1
+button_up
+  rotate: false
+  xy: 0, 0
+  size: 19, 25
+  orig: 19, 25
+  offset: 0, 0
+  index: -1
+text_imput
+  rotate: false
+  xy: 36, 37
+  size: 17, 18
+  orig: 17, 18
+  offset: 0, 0
+  index: -1
