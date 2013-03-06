@@ -406,7 +406,7 @@ public class funciones {
 		listTarget.clear();
 	}
 	
-	/*Este es un comentario*/
+	/*Se seleccionan las unidades en un area determinada definida por 2 rangos RH1 y Rh2*/
 	public void Target(Vector2 posicionMat, int size,List<Vector2> listTarget, List<Vector2> AlcanceRango,List<Vector2> AlcanceHabilidad,int HABILIDAD,Nodo[][] nodos ){
 		int RH1 = nodos[(int)posicionMat.y][(int)posicionMat.x].ficha.RH1;
 		int RH2 = nodos[(int)posicionMat.y][(int)posicionMat.x].ficha.RH2;
