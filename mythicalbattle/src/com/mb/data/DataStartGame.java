@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.mb.data;
 
 public class DataStartGame {
 	private int IDMAP;

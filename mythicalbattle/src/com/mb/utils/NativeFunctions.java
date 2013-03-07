@@ -1,4 +1,8 @@
-package com.me.mygdxgame;
+package com.mb.utils;
+
+import com.mb.data.EquipData;
+import com.mb.data.ObjectData;
+import com.mb.data.SpellData;
 
 public interface NativeFunctions {
 	

@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.mb.screens;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.mb.data.DataStartGame;
 
 public class LoadingScreen extends AbstractScreen{
 	

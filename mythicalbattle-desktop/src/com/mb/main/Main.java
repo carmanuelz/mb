@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.mb.main;
 
 import java.net.InetSocketAddress;
 import java.sql.Connection;
@@ -18,11 +18,18 @@ import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
+import com.mb.data.RecoveryData;
+import com.mb.data.EquipData;
+import com.mb.data.ObjectData;
+import com.mb.data.SpellData;
+import com.mb.screens.mainscreen;
+import com.mb.utils.NativeFunctions;
+
 public class Main implements NativeFunctions {
 	
 	private String url = "jdbc:sqlite:../mythicalbattle-android/assets/dx/mythbattle.sqlite";
 	private Connection connection = null;
-	public CardData CardData;
+	public RecoveryData CardData;
 	
 	public int percent = 100;
 	
@@ -66,7 +73,7 @@ public void getConnection() {
         } catch (SQLException e) {
                 e.printStackTrace();
         }
-        CardData = new CardData(connection);
+        CardData = new RecoveryData(connection);
 }
 
 @Override

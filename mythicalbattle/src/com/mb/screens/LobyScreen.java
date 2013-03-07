@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.mb.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;

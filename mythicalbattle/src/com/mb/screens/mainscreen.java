@@ -1,7 +1,8 @@
-package com.me.mygdxgame;
+package com.mb.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.mb.utils.NativeFunctions;
 
 /**
  * @author Mats Svensson

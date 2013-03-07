@@ -1,15 +1,15 @@
-package com.me.mygdxgame;
+package com.mb.data;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class CardData {
+public class RecoveryData {
 	private ResultSet resultSet = null;
 	static Connection con;
 	private Statement statement = null;
-	public CardData(Connection conection){
+	public RecoveryData(Connection conection){
 		con = conection;
 	}
 	

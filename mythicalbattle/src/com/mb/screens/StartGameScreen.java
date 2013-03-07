@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.mb.screens;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,6 +39,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
+import com.mb.data.DataStartGame;
+import com.mb.data.ObjectData;
+import com.mb.objects.Ficha;
+import com.mb.objects.Nodo;
+import com.mb.utils.SpriteAccessor;
+import com.mb.utils.funciones;
 
 public class StartGameScreen extends AbstractScreen{
 

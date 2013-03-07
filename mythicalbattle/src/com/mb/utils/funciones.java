@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.mb.utils;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.mb.objects.Nodo;
 
 public class funciones {
 	private float factorH = 0;

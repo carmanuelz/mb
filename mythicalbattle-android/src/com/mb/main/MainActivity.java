@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.mb.main;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -26,13 +26,19 @@ import android.util.Log;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.mb.data.RecoveryData;
+import com.mb.data.EquipData;
+import com.mb.data.ObjectData;
+import com.mb.data.SpellData;
+import com.mb.screens.mainscreen;
+import com.mb.utils.NativeFunctions;
 
 public class MainActivity extends AndroidApplication implements NativeFunctions {
 		
 	private static String file_url = "https://dl.dropbox.com/u/79250909/mythbattle.sqlite";	
 	String url = "jdbc:sqldroid:/data/data/com.me.mygdxgame/files/mythbattle.sqlite";
 	private Connection connection;
-	public CardData CardData;
+	public RecoveryData CardData;
 	
     public int filesize = 0;
     public int percent = 0;
@@ -88,7 +94,7 @@ public void getConnection() {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	 CardData = new CardData(connection); 
+	 CardData = new RecoveryData(connection); 
 }
 
 

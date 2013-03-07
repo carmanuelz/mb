@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.mb.objects;
 
 public class Map {
 	public int width = 20;

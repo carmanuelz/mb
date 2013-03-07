@@ -1,4 +1,4 @@
-package com.me.mygdxgame;
+package com.mb.objects;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -26,6 +26,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mb.data.ObjectData;
+import com.mb.screens.StartGameScreen;
+import com.mb.utils.SpriteAccessor;
+import com.mb.utils.funciones;
 public class Ficha {
 	private Sprite ficha;
 	public boolean move = true;
