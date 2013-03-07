@@ -128,7 +128,7 @@ public class StartGameScreen extends AbstractScreen{
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 	private DataStartGame Data;
-	private FichaData fichadata;
+	private ObjectData ObjectData;
 	public StartGameScreen startgamescreen = this;
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 	
@@ -218,7 +218,7 @@ public class StartGameScreen extends AbstractScreen{
 		
 		funciones = new funciones(factorH);
 		
-		fichadata = game.mNativeFunctions.getFichaData(1);
+		ObjectData = game.mNativeFunctions.getHeroData(1);
 		//System.out.println(fichadata.nombre+" "+fichadata.descripcion);
 		
 		textures = new TextureAtlas(Gdx.files.internal("data/texturas.pack"));
@@ -233,9 +233,9 @@ public class StartGameScreen extends AbstractScreen{
 		
 		
 		Torre = textures.createSprite("torre");
-		Torre.setSize(200*factorH,377*factorH);
+		Torre.setSize(300*factorH,300*factorH);
 		Vector2 posTorre = funciones.SeleccionarPos(12,9);
-		Torre.setPosition(posTorre.x-losetaW/2, posTorre.y);
+		Torre.setPosition(posTorre.x-losetaW/2-50*factorH, posTorre.y);
 		
 		
 		Skin skin = new Skin(Gdx.files.internal("data/controlui.json"));
@@ -268,7 +268,7 @@ public class StartGameScreen extends AbstractScreen{
 		
 		Gdx.input.setInputProcessor(multiplexer);
 		
-		ficha = new Ficha(this,fichadata);
+		ficha = new Ficha(this,ObjectData);
 		
 		Nodos = new Nodo[38][38];
 		for(int j=0;j<38;j++)
@@ -390,7 +390,7 @@ public class StartGameScreen extends AbstractScreen{
 	    		DraggedFicha = new Sprite(ficha.getSprite());
 	    		DraggedFicha.setColor(1, 1, 1, 0.7f);
 	    		enableDragged();
-	    		SIZESELECTED = fichadata.size;
+	    		SIZESELECTED = ObjectData.size;
 	    		if(NODOSELECTED!=null)
 	    			Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.unselected();
 	    		cardStage.clear();
@@ -404,9 +404,9 @@ public class StartGameScreen extends AbstractScreen{
 	    				!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].ocupado &&
 	    				!Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].ocupado &&
 	    				!Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].ocupado ){
-	    				Ficha tem = new Ficha(startgamescreen, fichadata);
+	    				Ficha tem = new Ficha(startgamescreen, ObjectData);
 		            	tem.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
-		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].size = fichadata.size;
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].size = ObjectData.size;
 		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=tem;
 		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;
 		            	
@@ -427,7 +427,7 @@ public class StartGameScreen extends AbstractScreen{
 	    		}
 	    		else{
 	    			if(!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado){
-		            	Ficha tem = new Ficha(startgamescreen, fichadata);
+		            	Ficha tem = new Ficha(startgamescreen, ObjectData);
 		            	tem.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
 		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=tem;
 		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;

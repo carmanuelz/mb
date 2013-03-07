@@ -22,7 +22,7 @@ public class Main implements NativeFunctions {
 	
 	private String url = "jdbc:sqlite:../mythicalbattle-android/assets/dx/mythbattle.sqlite";
 	private Connection connection = null;
-	private ObjectsData objectstData;
+	public CardData CardData;
 	
 	public int percent = 100;
 	
@@ -66,13 +66,9 @@ public void getConnection() {
         } catch (SQLException e) {
                 e.printStackTrace();
         }
-        objectstData = new ObjectsData(connection);
+        CardData = new CardData(connection);
 }
-@Override
-public FichaData getFichaData(int id) {
-	// TODO Auto-generated method stub
-	return objectstData.getFichaData(id);
-}
+
 @Override
 public void DownloadDB(int size) {
 	// TODO Auto-generated method stub
@@ -84,6 +80,31 @@ public float getPercent() {
 	if(percent>0)
 		return percent;
 	return 0;
+}
+@Override
+public ObjectData getHeroData(int id) {
+	// TODO Auto-generated method stub
+	return CardData.getHeroData(id);
+}
+@Override
+public ObjectData getRelicData(int id) {
+	// TODO Auto-generated method stub
+	return CardData.getRelicData(id);
+}
+@Override
+public ObjectData getTowerData(int id) {
+	// TODO Auto-generated method stub
+	return CardData.getTowerData(id);
+}
+@Override
+public EquipData getEquipData(int id) {
+	// TODO Auto-generated method stub
+	return CardData.getEquipData(id);
+}
+@Override
+public SpellData getSpellData(int id) {
+	// TODO Auto-generated method stub
+	return CardData.getSpellData(id);
 }
 
 }

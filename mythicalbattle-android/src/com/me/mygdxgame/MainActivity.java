@@ -29,10 +29,10 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
 public class MainActivity extends AndroidApplication implements NativeFunctions {
 		
-	private static String file_url = "http://dl.dropbox.com/u/79250909/mythbattle.sqlite";	
+	private static String file_url = "https://dl.dropbox.com/u/79250909/mythbattle.sqlite";	
 	String url = "jdbc:sqldroid:/data/data/com.me.mygdxgame/files/mythbattle.sqlite";
 	private Connection connection;
-    private ObjectsData objectstData;
+	public CardData CardData;
 	
     public int filesize = 0;
     public int percent = 0;
@@ -88,13 +88,9 @@ public void getConnection() {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	 objectstData = new ObjectsData(connection); 
+	 CardData = new CardData(connection); 
 }
 
-@Override
-public FichaData getFichaData(int id){
-	return objectstData.getFichaData(id);
-}
 
 
 public void DownloadDB(int size){
@@ -167,6 +163,32 @@ public void DownloadDB(int size){
 		if(percent>0)
 			return percent;
 		return 0;
+	}
+	
+	@Override
+	public ObjectData getHeroData(int id) {
+		// TODO Auto-generated method stub
+		return CardData.getHeroData(id);
+	}
+	@Override
+	public ObjectData getRelicData(int id) {
+		// TODO Auto-generated method stub
+		return CardData.getRelicData(id);
+	}
+	@Override
+	public ObjectData getTowerData(int id) {
+		// TODO Auto-generated method stub
+		return CardData.getTowerData(id);
+	}
+	@Override
+	public EquipData getEquipData(int id) {
+		// TODO Auto-generated method stub
+		return CardData.getEquipData(id);
+	}
+	@Override
+	public SpellData getSpellData(int id) {
+		// TODO Auto-generated method stub
+		return CardData.getSpellData(id);
 	}
 
 }

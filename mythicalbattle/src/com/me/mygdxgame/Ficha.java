@@ -32,6 +32,7 @@ public class Ficha {
 	private boolean selected = false;
 	private boolean targeted = false;
 	private boolean targetedFriend = false;
+	private ObjectData data;
 	
 	private Sprite select;
 	private Sprite rango;
@@ -91,7 +92,8 @@ public class Ficha {
 	private funciones funciones;
 	
 	
-	public Ficha(StartGameScreen startgamescreen, FichaData Data){
+	public Ficha(StartGameScreen startgamescreen, ObjectData Data){
+		data = Data;
 		size = Data.size;
 		startgame = startgamescreen;
 		IdFicha= startgame.indexFicha;
@@ -103,8 +105,6 @@ public class Ficha {
 		AlcanceHabilidad = new LinkedList<Vector2>();
 		listTargetEnem = new LinkedList<Vector2>();
 		listTargetFriend = new LinkedList<Vector2>();
-		
-		System.out.println(size);
 		
 		addActors();
 		
@@ -275,7 +275,6 @@ public class Ficha {
 		Iterator<Vector2> iter = listTargetEnem.iterator();
 		while(iter.hasNext()){
 			Vector2 index = iter.next();
-			System.out.println(index+" - " + indexTarget);
 			if(index.x==indexTarget.x && index.y==indexTarget.y)
 				return true;
 		}
@@ -370,7 +369,7 @@ public class Ficha {
 	}
 	
 	private void addTexture(){
-		ficha = startgame.textures.createSprite("ficha");
+		ficha = startgame.textures.createSprite(data.nombre);
 		ficha.setSize(200*startgame.factorH, 200*startgame.factorH);
 		
 		select = startgame.textures.createSprite("loseta");

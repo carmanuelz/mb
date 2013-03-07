@@ -3,23 +3,37 @@ texturas.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+ficha22
+  rotate: false
+  xy: 1, 203
+  size: 300, 300
+  orig: 300, 300
+  offset: 0, 0
+  index: -1
 torre
   rotate: false
-  xy: 1, 73
-  size: 200, 377
-  orig: 200, 377
+  xy: 303, 203
+  size: 300, 300
+  orig: 300, 300
   offset: 0, 0
   index: -1
 ficha
   rotate: false
-  xy: 203, 250
+  xy: 1, 1
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+ficha2
+  rotate: false
+  xy: 605, 303
   size: 200, 200
   orig: 200, 200
   offset: 0, 0
   index: -1
 loseta
   rotate: false
-  xy: 1, 1
+  xy: 203, 131
   size: 100, 70
   orig: 100, 70
   offset: 0, 0
