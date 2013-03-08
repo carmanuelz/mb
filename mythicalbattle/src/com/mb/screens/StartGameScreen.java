@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +40,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.mb.data.CardData;
+import com.mb.data.ConfigurationHeroData;
 import com.mb.data.DataStartGame;
 import com.mb.data.ObjectData;
 import com.mb.objects.Object;
@@ -131,6 +135,7 @@ public class StartGameScreen extends AbstractScreen{
 	
 	public float losetaW;
 	public float losetaH;
+	public CardData carddata;
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 	private DataStartGame Data;
@@ -194,6 +199,7 @@ public class StartGameScreen extends AbstractScreen{
 	}
 
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
@@ -214,6 +220,31 @@ public class StartGameScreen extends AbstractScreen{
 		
 		camera = new OrthographicCamera(Width,Height);
 		batch = new SpriteBatch();
+		
+		ConfigurationHeroData conf = new ConfigurationHeroData();
+		conf.Nivel = 1;
+		conf.ExperiencePoints = 500;
+		conf.HitsPoints = 60;
+		conf.AtackPoints = 50;
+		conf.EnergyPoints = 6;
+		conf.DefencePoints = 3;
+		conf.NivelH1 = 1;
+		conf.NivelH2 = 1;
+		conf.NivelH3 = 1;
+		conf.NivelH4 = 1;
+		
+		carddata = new CardData();
+		carddata.faccion = 1;
+		carddata.tipo = "hero";
+		carddata.idobjeto = 1;
+		carddata.conf = conf;
+		
+		ArrayList<CardData> listcards2 = new ArrayList<CardData>();
+		
+		String text = "[{class:com.mb.data.CardData,conf:{Nivel:1,HitsPoints:60,NivelH3:1,EnergyPoints:6,NivelH2:1,ExperiencePoints:500,NivelH4:1,DefencePoints:3,AtackPoints:50,NivelH1:1},idobjeto:1,faccion:1,tipo:hero},{class:com.mb.data.CardData,conf:{Nivel:1,HitsPoints:60,NivelH3:1,EnergyPoints:6,NivelH2:1,ExperiencePoints:500,NivelH4:1,DefencePoints:3,AtackPoints:50,NivelH1:1},idobjeto:1,faccion:1,tipo:hero}]";
+		Json json2 = new Json();
+		listcards2 = json2.fromJson(ArrayList.class, text);
+		System.out.println(listcards2.get(0).tipo);
 		
 		Data.setIDMap(1);
 		Data.setGold(150);
@@ -446,6 +477,64 @@ public class StartGameScreen extends AbstractScreen{
 		joystick2.addListener(cardListener);		
 		Deck.addListener(cardListener);
 		Card.addListener(cardListener);
+	}
+	
+	public InputListener getCardListener(){
+		InputListener ObjectListener = new InputListener() {
+	    	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+	    		Objeto = new Object(startgamescreen,ObjectData);
+	    		DraggedFicha = new Sprite(Objeto.getSprite());
+	    		DraggedFicha.setColor(1, 1, 1, 0.7f);
+	    		enableDragged();
+	    		SIZESELECTED = ObjectData.size;
+	    		if(NODOSELECTED!=null)
+	    			Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.unselected();
+	    		cardStage.clear();
+				ESTADO = UNSELECTED;
+				NODOSELECTED = null;
+	            return true;
+	    }
+	    	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+	    		if(SIZESELECTED==2){
+	    			if(	!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado && 
+	    				!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].ocupado &&
+	    				!Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].ocupado &&
+	    				!Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].ocupado ){
+	    				
+	    				Objeto.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=Objeto;
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].size = Objeto.size;
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;
+		            	
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado = true;
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].ocupado = true;
+		            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].ocupado = true;
+		            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].ocupado = true;
+		            	
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].Reflect = true;
+		            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].Reflect = true;
+		            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].Reflect = true;
+		            	
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].nodoReflect = TempPosicionMat;
+		            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].nodoReflect = TempPosicionMat;
+		            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].nodoReflect =TempPosicionMat;
+		            	indexFicha+=1;
+	    			}
+	    		}
+	    		else{
+	    			if(!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado){
+		            	Object tem = new Object(startgamescreen, ObjectData);
+		            	tem.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=tem;
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado = true;
+		            	indexFicha+=1;
+		            }
+	    		}
+	            desableDragged();
+				    }
+				};
+				return ObjectListener;
 	}
 
 	@Override
