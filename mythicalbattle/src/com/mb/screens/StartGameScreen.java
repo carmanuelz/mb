@@ -41,10 +41,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
 import com.mb.data.DataStartGame;
 import com.mb.data.ObjectData;
-import com.mb.objects.Ficha;
+import com.mb.objects.Object;
 import com.mb.objects.Nodo;
 import com.mb.utils.SpriteAccessor;
-import com.mb.utils.funciones;
+import com.mb.utils.Funciones;
 
 public class StartGameScreen extends AbstractScreen{
 
@@ -73,7 +73,7 @@ public class StartGameScreen extends AbstractScreen{
 	private float porcentx;
 	private float porcenty;
 	
-	private Ficha ficha;
+	private Object Objeto;
 
 	private Sprite DraggedFicha;
 	private boolean dragged = false;
@@ -91,7 +91,7 @@ public class StartGameScreen extends AbstractScreen{
 	
 	public final TweenManager tweenManager = new TweenManager();
 	
-	public funciones funciones;
+	public Funciones funciones;
 	
 	public Nodo[][] Nodos;
 	
@@ -138,7 +138,7 @@ public class StartGameScreen extends AbstractScreen{
 	public StartGameScreen startgamescreen = this;
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 	
-	public StartGameScreen(mainscreen game, DataStartGame data) {		
+	public StartGameScreen(MainScreen game, DataStartGame data) {		
 		super(game);
 		// TODO Auto-generated constructor stub
 		game.mNativeFunctions.getConnection();
@@ -222,9 +222,9 @@ public class StartGameScreen extends AbstractScreen{
 		Json json = new Json();
 		System.out.println(json.toJson(Data));
 		
-		funciones = new funciones(factorH);
+		funciones = new Funciones(factorH);
 		
-		ObjectData = game.mNativeFunctions.getHeroData(1);
+		ObjectData = game.mNativeFunctions.getHeroData(3);
 		//System.out.println(fichadata.nombre+" "+fichadata.descripcion);
 		
 		textures = new TextureAtlas(Gdx.files.internal("data/texturas.pack"));
@@ -273,8 +273,6 @@ public class StartGameScreen extends AbstractScreen{
 		multiplexer.addProcessor(inputProcessor);
 		
 		Gdx.input.setInputProcessor(multiplexer);
-		
-		ficha = new Ficha(this,ObjectData);
 		
 		Nodos = new Nodo[38][38];
 		for(int j=0;j<38;j++)
@@ -385,15 +383,15 @@ public class StartGameScreen extends AbstractScreen{
 		
 		Deck.addListener(new InputListener() {
 	    	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-	    		String hola="";
-	    		hola = getSize();
-	    		System.out.println(hola);
-	            return true;
+	    		ObjectData hero = game.mNativeFunctions.getHeroData(1);
+	    		System.out.println(hero.nombre);
+	    		return true;
 	    }});
 		
 		Card.addListener(new InputListener() {
 	    	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-	    		DraggedFicha = new Sprite(ficha.getSprite());
+	    		Objeto = new Object(startgamescreen,ObjectData);
+	    		DraggedFicha = new Sprite(Objeto.getSprite());
 	    		DraggedFicha.setColor(1, 1, 1, 0.7f);
 	    		enableDragged();
 	    		SIZESELECTED = ObjectData.size;
@@ -410,10 +408,10 @@ public class StartGameScreen extends AbstractScreen{
 	    				!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].ocupado &&
 	    				!Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].ocupado &&
 	    				!Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].ocupado ){
-	    				Ficha tem = new Ficha(startgamescreen, ObjectData);
-		            	tem.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
-		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].size = ObjectData.size;
-		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=tem;
+	    				
+	    				Objeto.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=Objeto;
+		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].size = Objeto.size;
 		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;
 		            	
 		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado = true;
@@ -433,7 +431,7 @@ public class StartGameScreen extends AbstractScreen{
 	    		}
 	    		else{
 	    			if(!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado){
-		            	Ficha tem = new Ficha(startgamescreen, ObjectData);
+		            	Object tem = new Object(startgamescreen, ObjectData);
 		            	tem.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
 		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=tem;
 		            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;
@@ -471,7 +469,7 @@ public class StartGameScreen extends AbstractScreen{
 			if(dragged){
 				Vector2 posFicha = funciones.SeleccionarPos(posMat.x, posMat.y);
 				TempPosicionMat = new Vector2(posMat);
-				DraggedFicha.setPosition(posFicha.x-(25*factorH), posFicha.y+(11*factorH));
+				DraggedFicha.setPosition(posFicha.x-Objeto.offsetW, posFicha.y+Objeto.offsetH);
 			}
 			if(atdragged){
 				funciones.Untarget(listTarget,HABILIDAD,Nodos);
@@ -670,7 +668,7 @@ public class StartGameScreen extends AbstractScreen{
 		
 	};
 	
-	public Ficha getFichaById(int id){
+	public Object getFichaById(int id){
 		for(int i = 0 ; i< 38; i++)
 			for(int j = 0; j<38; j++){
 				if(Nodos[j][i].ficha.IdFicha == id)

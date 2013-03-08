@@ -24,7 +24,7 @@ public class LobyScreen extends AbstractScreen {
 	float factorw = 1;
 	float factorh = 1;
 	
-	public LobyScreen(mainscreen game) {
+	public LobyScreen(MainScreen game) {
 		super(game);
 		// TODO Auto-generated constructor stub
 	}

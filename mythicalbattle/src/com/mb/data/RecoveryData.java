@@ -14,20 +14,21 @@ public class RecoveryData {
 	}
 	
 	public ObjectData getHeroData(int id){
-		ObjectData fichaData = new ObjectData();
+		ObjectData hero = new ObjectData();
 		   try {
 		     statement = con.createStatement();
 		     resultSet = statement.executeQuery("SELECT * FROM hero where idhero ="+id);
 		     while (resultSet.next())
 		     {
-		    	 fichaData.nombre = resultSet.getString("nombre");
-		    	 fichaData.descripcion = resultSet.getString("descripcion");
+		    	 hero.nombre = resultSet.getString("nombre");
+		    	 hero.descripcion = resultSet.getString("descripcion");
+		    	 hero.size = Integer.parseInt(resultSet.getString("size"));
 		     }
 		    }
 		    catch (SQLException ex) {
 		       System.out.println(ex);
 		    }
-		return fichaData;
+		return hero;
 	}
 	
 	public ObjectData getRelicData(int id){
@@ -37,7 +38,19 @@ public class RecoveryData {
 	
 	public ObjectData getTowerData(int id){
 		ObjectData fichaData = new ObjectData();
-		  
+		try {
+			statement = con.createStatement();
+		    resultSet = statement.executeQuery("SELECT * FROM hero where idhero ="+id);
+		    while (resultSet.next())
+		    {
+		    	fichaData.nombre = resultSet.getString("nombre");
+		    	fichaData.descripcion = resultSet.getString("descripcion");
+		    	
+		    }
+		    }
+		    catch (SQLException ex) {
+		       System.out.println(ex);
+		    }
 		return fichaData;
 	}
 	
@@ -49,6 +62,12 @@ public class RecoveryData {
 	
 	public EquipData getEquipData(int id){
 		EquipData fichaData = new EquipData();
+		  
+		return fichaData;
+	}
+	
+	public CardData getCardData(int id){
+		CardData fichaData = new CardData();
 		  
 		return fichaData;
 	}

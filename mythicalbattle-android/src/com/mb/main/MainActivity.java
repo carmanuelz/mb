@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.concurrent.Executors;
 
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -30,7 +31,8 @@ import com.mb.data.RecoveryData;
 import com.mb.data.EquipData;
 import com.mb.data.ObjectData;
 import com.mb.data.SpellData;
-import com.mb.screens.mainscreen;
+import com.mb.data.CardData;
+import com.mb.screens.MainScreen;
 import com.mb.utils.NativeFunctions;
 
 public class MainActivity extends AndroidApplication implements NativeFunctions {
@@ -38,7 +40,7 @@ public class MainActivity extends AndroidApplication implements NativeFunctions 
 	private static String file_url = "https://dl.dropbox.com/u/79250909/mythbattle.sqlite";	
 	String url = "jdbc:sqldroid:/data/data/com.me.mygdxgame/files/mythbattle.sqlite";
 	private Connection connection;
-	public RecoveryData CardData;
+	public RecoveryData RecoveryData;
 	
     public int filesize = 0;
     public int percent = 0;
@@ -49,7 +51,7 @@ public class MainActivity extends AndroidApplication implements NativeFunctions 
         
         AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
         cfg.useGL20 = false;        
-        initialize(new mainscreen(this), cfg);
+        initialize(new MainScreen(this), cfg);
     }
 public void cliente(){
 	
@@ -76,7 +78,7 @@ public void cliente(){
     }
 
 @Override
-public void getConnection() {
+public Connection getConnection() {
 	 try {
          Class.forName("org.sqldroid.SQLDroidDriver").newInstance();
          connection = DriverManager.getConnection(url);
@@ -94,7 +96,7 @@ public void getConnection() {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	 CardData = new RecoveryData(connection); 
+	 return connection;
 }
 
 
@@ -174,27 +176,41 @@ public void DownloadDB(int size){
 	@Override
 	public ObjectData getHeroData(int id) {
 		// TODO Auto-generated method stub
-		return CardData.getHeroData(id);
+		connection = getConnection();
+		RecoveryData = new RecoveryData(connection);
+		ObjectData hero = RecoveryData.getHeroData(id);
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return hero;
 	}
 	@Override
 	public ObjectData getRelicData(int id) {
 		// TODO Auto-generated method stub
-		return CardData.getRelicData(id);
+		return RecoveryData.getRelicData(id);
 	}
 	@Override
 	public ObjectData getTowerData(int id) {
 		// TODO Auto-generated method stub
-		return CardData.getTowerData(id);
+		return RecoveryData.getTowerData(id);
 	}
 	@Override
 	public EquipData getEquipData(int id) {
 		// TODO Auto-generated method stub
-		return CardData.getEquipData(id);
+		return RecoveryData.getEquipData(id);
 	}
 	@Override
 	public SpellData getSpellData(int id) {
 		// TODO Auto-generated method stub
-		return CardData.getSpellData(id);
+		return RecoveryData.getSpellData(id);
+	}
+	@Override
+	public CardData getCardData(int id) {
+		// TODO Auto-generated method stub
+		return RecoveryData.getCardData(id);
 	}
 
 }

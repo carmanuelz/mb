@@ -7,9 +7,9 @@ import com.badlogic.gdx.Screen;
  */
 public abstract class AbstractScreen implements Screen {
 
-    protected mainscreen game;
+    protected MainScreen game;
 
-    public AbstractScreen(mainscreen game) {
+    public AbstractScreen(MainScreen game) {
         this.game = game;
     }
 

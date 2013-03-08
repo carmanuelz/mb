@@ -1,5 +1,8 @@
 package com.mb.utils;
 
+import java.sql.Connection;
+
+import com.mb.data.CardData;
 import com.mb.data.EquipData;
 import com.mb.data.ObjectData;
 import com.mb.data.SpellData;
@@ -7,7 +10,7 @@ import com.mb.data.SpellData;
 public interface NativeFunctions {
 	
 	public void cliente();
-	public void getConnection();
+	public Connection getConnection();
 	public void DownloadDB(int size);	
 	public float getPercent();
 	
@@ -17,4 +20,6 @@ public interface NativeFunctions {
 	
 	public EquipData getEquipData(int id);
 	public SpellData getSpellData(int id);
+	
+	public CardData getCardData(int id);
 }

@@ -33,7 +33,7 @@ public class LoadingScreen extends AbstractScreen{
 	float factorh = 0;
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 	
-	public LoadingScreen(mainscreen game) {
+	public LoadingScreen(MainScreen game) {
         super(game);
     }
 
