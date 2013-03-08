@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Nodo {
 	
-	public Object ficha;
+	public Objeto ficha;
 	private int propiedad;
 	public Nodo parent;
 	public boolean ocupado;

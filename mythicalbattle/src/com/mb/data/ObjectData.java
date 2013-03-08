@@ -5,5 +5,6 @@ public class ObjectData {
 	public String nombre;
 	public String descripcion;
 	public int Type;
-	public int size;
+	public int size;	
+	
 }

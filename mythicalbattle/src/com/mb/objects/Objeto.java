@@ -30,7 +30,7 @@ import com.mb.data.ObjectData;
 import com.mb.screens.StartGameScreen;
 import com.mb.utils.SpriteAccessor;
 import com.mb.utils.Funciones;
-public class Object {
+public class Objeto {
 	private Sprite ficha;
 	public boolean move = true;
 	private boolean selected = false;
@@ -97,7 +97,7 @@ public class Object {
 	private Funciones funciones;
 	
 	
-	public Object(StartGameScreen startgamescreen, ObjectData Data){
+	public Objeto(StartGameScreen startgamescreen, ObjectData Data){
 		
 		startgame = startgamescreen;
 		data = Data;
