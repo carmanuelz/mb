@@ -78,7 +78,7 @@ public Connection getConnection() {
 }
 
 @Override
-public void DownloadDB(int size) {
+public void DownloadDB() {
 	// TODO Auto-generated method stub
 	
 }

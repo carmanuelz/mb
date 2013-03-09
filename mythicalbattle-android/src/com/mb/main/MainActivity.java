@@ -1,7 +1,10 @@
 package com.mb.main;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URL;
@@ -101,10 +104,9 @@ public Connection getConnection() {
 
 
 
-public void DownloadDB(int size){
-	filesize = size;
-	new DownloadFileFromURL().execute(file_url);
-}
+	public void DownloadDB(){
+		new DownloadFileFromURL().execute(file_url);
+	}
 
 	class DownloadFileFromURL extends AsyncTask<String, String, String> {
 		/**
@@ -115,12 +117,37 @@ public void DownloadDB(int size){
 		protected void onPreExecute() {
 			super.onPreExecute();
 		}
+		
+		public String getSize() {
+		      String input = "";
+
+		      try {
+		         URL httpurl = new URL(
+		               "http://192.168.0.13/mb/filesize.php");
+		         URLConnection httpconn = httpurl.openConnection();
+		         httpconn.setConnectTimeout(3000);
+		         httpconn.connect();
+		         BufferedReader br = new BufferedReader(new InputStreamReader(
+		        		 httpconn.getInputStream()));
+		         String line;
+		         while ((line = br.readLine()) != null) {
+		            input += line;
+		         }
+		         br.close();
+		      } catch (IOException e) {
+		         e.printStackTrace();
+		         input = "";
+		      } 
+		      return input;
+		   }
 	
 		/**
 		 * Downloading file in background thread
 		 * */
 		@Override
 		protected String doInBackground(String... f_url) {
+			filesize = Integer.parseInt(getSize());
+			System.out.println(filesize);
 			int count;
 	        try {
 	            URL url = new URL(f_url[0]);
@@ -162,7 +189,7 @@ public void DownloadDB(int size){
 	        return null;
 		}
 	}
-	
+
 	
 
 	@Override

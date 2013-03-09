@@ -41,7 +41,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
 import com.mb.data.CardData;
-import com.mb.data.ConfigurationHeroData;
 import com.mb.data.DataStartGame;
 import com.mb.data.ObjectData;
 import com.mb.objects.Nodo;
@@ -75,8 +74,6 @@ public class StartGameScreen extends AbstractScreen{
 	
 	private float porcentx;
 	private float porcenty;
-	
-	private Objeto Objeto;
 
 	private Sprite DraggedFicha;
 	private boolean dragged = false;
@@ -100,6 +97,7 @@ public class StartGameScreen extends AbstractScreen{
 	public Funciones funciones;
 	
 	public Nodo[][] Nodos;
+	public List<CardData> listcards;
 	
 	private Vector2 TempPosicionMat;
 	
@@ -150,7 +148,6 @@ public class StartGameScreen extends AbstractScreen{
 	
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 	private DataStartGame Data;
-	private ObjectData ObjectData;
 	public StartGameScreen startgamescreen = this;
 	/*<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<*/
 	
@@ -209,8 +206,6 @@ public class StartGameScreen extends AbstractScreen{
         cardStage.draw();
 	}
 
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
@@ -352,7 +347,6 @@ public class StartGameScreen extends AbstractScreen{
 		CardMagic.setPosition(300, 420);
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void AgregarListener(){
 		
 		InputListener cardListener = new InputListener() {
@@ -411,21 +405,17 @@ public class StartGameScreen extends AbstractScreen{
 	    		return true;
 	    }});
 		
-		ArrayList<CardData> listcards = new ArrayList<CardData>();
-		String text = "[{class:com.mb.data.CardData,conf:{Nivel:1,HitsPoints:60,NivelH3:1,EnergyPoints:6,NivelH2:1,ExperiencePoints:500,NivelH4:1,DefencePoints:3,AtackPoints:50,NivelH1:1},idobjeto:1,faccion:1,tipo:1},{class:com.mb.data.CardData,conf:{Nivel:1,HitsPoints:60,NivelH3:1,EnergyPoints:6,NivelH2:1,ExperiencePoints:500,NivelH4:1,DefencePoints:3,AtackPoints:50,NivelH1:1},idobjeto:2,faccion:1,tipo:1},{class:com.mb.data.CardData,conf:{Nivel:1,HitsPoints:60,NivelH3:1,EnergyPoints:6,NivelH2:1,ExperiencePoints:500,NivelH4:1,DefencePoints:3,AtackPoints:50,NivelH1:1},idobjeto:3,faccion:1,tipo:1}]";
-		Json json2 = new Json();
-		listcards = json2.fromJson(ArrayList.class, text);
+		listcards = getListCard();
 		
 		CardData carddata1 = listcards.get(0);
-		System.out.println(carddata1.idobjeto);
 		CardData carddata2 = listcards.get(1);
-		System.out.println(carddata2.idobjeto);
 		CardData carddata3 = listcards.get(2);
-		System.out.println(carddata3.idobjeto);
+		CardData carddata4 = listcards.get(3);
 		
 		Card.addListener(getCardListener(carddata1));
 		Card2.addListener(getCardListener(carddata2));
 		Card3.addListener(getCardListener(carddata3));
+		CardMagic.addListener(getCardListener(carddata4));
 		
 		joystick2.addListener(cardListener);		
 		Deck.addListener(cardListener);
@@ -611,9 +601,7 @@ public class StartGameScreen extends AbstractScreen{
 							}
 						}
 						else{ 
-							cardStage.clear();
-							ESTADO = UNSELECTED;
-							NODOSELECTED = null;
+							Unselect();
 						}
 					}
 					else 
@@ -700,6 +688,11 @@ public class StartGameScreen extends AbstractScreen{
 		}
 	}
 	
+	public void Unselect(){
+		cardStage.clear();
+		ESTADO = UNSELECTED;
+		NODOSELECTED = null;
+	}
 	
 	public InputListener getCardListener(final CardData CardData){
 		InputListener ObjectListener;
@@ -718,9 +711,7 @@ public class StartGameScreen extends AbstractScreen{
 			    		offsetH = objetotem.offsetH;
 			    		if(NODOSELECTED!=null)
 			    			Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.unselected();
-			    		cardStage.clear();
-						ESTADO = UNSELECTED;
-						NODOSELECTED = null;
+			    		Unselect();
 			            return true;
 			    }
 		    	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
@@ -774,15 +765,17 @@ public class StartGameScreen extends AbstractScreen{
 			case SPELLTYPE:
 				ObjectListener = new InputListener() {
 			    	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button){
+			    		HABILIDAD = ATFTYPE;
+			    		SPELLR = 3;
 			    		atdragged=true;
 			    		spelldragged = true;
+			    		Unselect();
 				        return true;
 				    }
 			    	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 			    		if(atdragged){
 							atdragged=false;
 							spelldragged = false;
-							Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.usarHabilidad(listTarget);
 							funciones.Untarget(listTarget,HABILIDAD,Nodos);
 						}
 			    	}
@@ -794,18 +787,18 @@ public class StartGameScreen extends AbstractScreen{
 		}
 	}
 	
-
-	public String getSize() {
+	@SuppressWarnings("unchecked")
+	private List<CardData> getListCard(){
 	      String input = "";
-
+	
 	      try {
-	         URL url = new URL(
-	               "http://190.118.213.102/mb/filesize.php");
-	         URLConnection connection = url.openConnection();
-	         connection.setConnectTimeout(3000);
-	         connection.connect();
+	         URL httpurl = new URL(
+	               "http://192.168.0.13/mb/deckdata.php");
+	         URLConnection httpconn = httpurl.openConnection();
+	         httpconn.setConnectTimeout(3000);
+	         httpconn.connect();
 	         BufferedReader br = new BufferedReader(new InputStreamReader(
-	               connection.getInputStream()));
+	        		 httpconn.getInputStream()));
 	         String line;
 	         while ((line = br.readLine()) != null) {
 	            input += line;
@@ -814,10 +807,18 @@ public class StartGameScreen extends AbstractScreen{
 	      } catch (IOException e) {
 	         e.printStackTrace();
 	         input = "";
-	      } 
-	      return input;
-	   }
-
+	      }
+	    if(input.equals(""))
+	    	return null;
+	    else{
+	    	listcards = new ArrayList<CardData>();
+	    	Json json2 = new Json();
+			listcards = json2.fromJson(ArrayList.class, input);
+	    }
+		      
+		return listcards;
+	}
+	
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub

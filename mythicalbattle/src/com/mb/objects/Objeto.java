@@ -93,6 +93,8 @@ public class Objeto {
 	
 	private ImageButton Move;
 	private ImageButton Atack;
+	private ImageButton butt3;
+	private ImageButton butt4;
 	
 	private Funciones funciones;
 	
@@ -126,6 +128,8 @@ public class Objeto {
 		
 		Move.addListener(loadListener(2));
 		Atack.addListener(loadListener(3));
+		butt3.addListener(loadListener(5));
+		butt4.addListener(loadListener(7));
 	}
 	
 	public void FichaDraw(SpriteBatch spriteBatch){
@@ -183,6 +187,8 @@ public class Objeto {
 	public void addButton(Stage stage){
 		stage.addActor(Move);
 		stage.addActor(Atack);
+		stage.addActor(butt3);
+		stage.addActor(butt4);
 	}
 	
 	public void RangoMovDraw(SpriteBatch spriteBatch){
@@ -382,6 +388,12 @@ public class Objeto {
 		
 		Atack = new ImageButton(styleButtonMove);
 		Atack.setPosition(280, 0);
+		
+		butt3 = new ImageButton(styleButtonMove);
+		butt3.setPosition(360, 0);
+		
+		butt4 = new ImageButton(styleButtonMove);
+		butt4.setPosition(440, 0);
 	}
 	
 	private void addTexture(){
@@ -469,7 +481,7 @@ public class Objeto {
 			    		if(readyButton){
 			    			startgame.ESTADO=2;
 			    			startgame.HABILIDAD=5;
-			    			funciones.Target(posicionMat, button, listTargetFriend, AlcanceRango, AlcanceHabilidad, startgame.HABILIDAD, startgame.Nodos);
+			    			funciones.CalcularAlcance(posicionMat,size,RH1,RH2,AlcanceRango,AlcanceHabilidad,startgame.Nodos);
 			    		}
 			            return true;
 			    }};
@@ -480,7 +492,7 @@ public class Objeto {
 			    		if(readyButton){
 			    			startgame.ESTADO=2;
 			    			startgame.HABILIDAD=6;
-			    			funciones.Target(posicionMat, size, listTargetFriend, AlcanceRango, AlcanceHabilidad, startgame.HABILIDAD, startgame.Nodos);
+			    			funciones.CalcularAlcance(posicionMat,size,RH1,RH2,AlcanceRango,AlcanceHabilidad,startgame.Nodos);
 			    		}
 			            return true;
 			    }};
@@ -488,13 +500,20 @@ public class Objeto {
 			case 7:
 				Listener = new InputListener(){
 					public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-			    		if(readyButton){
+			            return true;
+			    }
+					public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+			    		/*if(readyButton){
 			    			startgame.ESTADO=2;
 			    			startgame.HABILIDAD=7;
 			    			funciones.Target(posicionMat, size, listTargetFriend, AlcanceRango, AlcanceHabilidad, startgame.HABILIDAD, startgame.Nodos);
-			    		}
-			            return true;
-			    }};
+			    		}*/
+						if(x>0 && x<68 && y>0 && y<74){
+							System.out.println(true);
+						}
+						else
+							System.out.println(false);
+			    	}};
 				return Listener;
 		}
 		return Listener;

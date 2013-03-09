@@ -18,7 +18,7 @@ public class MainScreen extends Game {
 		mNativeFunctions = nativeFunctions;
 	    //mNativeFunctions.cliente();
 		mNativeFunctions.getConnection();
-		mNativeFunctions.DownloadDB(360449);
+		mNativeFunctions.DownloadDB();
 	}
     public AssetManager manager = new AssetManager();
 

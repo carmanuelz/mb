@@ -11,7 +11,7 @@ public interface NativeFunctions {
 	
 	public void cliente();
 	public Connection getConnection();
-	public void DownloadDB(int size);	
+	public void DownloadDB();	
 	public float getPercent();
 	
 	public ObjectData getHeroData(int id);
