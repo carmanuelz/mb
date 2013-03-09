@@ -392,6 +392,32 @@ public class Funciones {
 		}
 	}
 	
+	public void targetTouch(Vector2 posMat,List<Vector2> listTarget,List<Vector2> AlcanceMP, List<Vector2> AlcanceHabilidad, int HABILIDAD, Nodo[][] nodos, int RH ){
+		int RH3 = RH;
+		CalcularAlcance(posMat,1,RH3,0,AlcanceMP,AlcanceHabilidad,nodos);
+		Iterator<Vector2> iter = AlcanceHabilidad.iterator();
+		while(iter.hasNext()){
+			Vector2 posicion = iter.next();
+			if(nodos[(int)posicion.y][(int)posicion.x].ocupado){
+				if(nodos[(int)posicion.y][(int)posicion.x].Reflect)
+					posicion = nodos[(int)posicion.y][(int)posicion.x].nodoReflect;
+				if(!nodos[(int)posicion.y][(int)posicion.x].target){
+					listTarget.add(posicion);
+					nodos[(int)posicion.y][(int)posicion.x].target = true;
+					if(HABILIDAD == ATFTYPE || HABILIDAD == STFTYPE)
+						nodos[(int)posicion.y][(int)posicion.x].ficha.targetF();
+					else
+						nodos[(int)posicion.y][(int)posicion.x].ficha.target();
+				}
+				if(nodos[(int)posicion.y][(int)posicion.x].size==2){
+					nodos[(int)posicion.y][(int)posicion.x+1].target = true;
+					nodos[(int)posicion.y+1][(int)posicion.x].target = true;
+					nodos[(int)posicion.y+1][(int)posicion.x+1].target = true;
+				}
+			}
+		}
+	}
+	
 	/*Se deselecciona a todos las fichas que se encuentren targeteadas por el area seleccionada, estas
 	 * son las dichas que se agregaron a la lista lisTarget*/
 
