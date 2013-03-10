@@ -793,7 +793,7 @@ public class StartGameScreen extends AbstractScreen{
 	
 	      try {
 	         URL httpurl = new URL(
-	               "http://192.168.0.13/mb/deckdata.php");
+	               "http://lazonanegativa.com/mb/deckdata.php");
 	         URLConnection httpconn = httpurl.openConnection();
 	         httpconn.setConnectTimeout(3000);
 	         httpconn.connect();

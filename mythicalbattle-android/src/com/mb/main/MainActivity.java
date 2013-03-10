@@ -75,7 +75,7 @@ public void cliente(){
         });
 
         // Start the connection attempt.
-        bootstrap.connect(new InetSocketAddress("192.168.0.13", 8080));
+        bootstrap.connect(new InetSocketAddress("http://lazonanegativa.com/", 8080));
     	//System.out.println("hola");
     	
     }
@@ -123,7 +123,7 @@ public Connection getConnection() {
 
 		      try {
 		         URL httpurl = new URL(
-		               "http://192.168.0.13/mb/filesize.php");
+		               "http://lazonanegativa.com//mb/filesize.php");
 		         URLConnection httpconn = httpurl.openConnection();
 		         httpconn.setConnectTimeout(3000);
 		         httpconn.connect();
