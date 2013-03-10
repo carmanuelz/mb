@@ -42,7 +42,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
 import com.mb.data.CardData;
 import com.mb.data.DataStartGame;
+import com.mb.data.MapData;
 import com.mb.data.ObjectData;
+import com.mb.data.TowerData;
 import com.mb.objects.Nodo;
 import com.mb.objects.Objeto;
 import com.mb.utils.Funciones;
@@ -70,7 +72,7 @@ public class StartGameScreen extends AbstractScreen{
 	public Sprite MapBack;
 	
 	private Sprite areaTarget;
-	private Sprite Torre;
+	private MapData Mapa;
 	
 	private float porcentx;
 	private float porcenty;
@@ -195,7 +197,6 @@ public class StartGameScreen extends AbstractScreen{
 			}
 		if(dragged)
 			DraggedFicha.draw(batch);
-		Torre.draw(batch);
 		
 		batch.end();
 		
@@ -212,6 +213,15 @@ public class StartGameScreen extends AbstractScreen{
 		Width = Gdx.graphics.getWidth();
 		Height = Gdx.graphics.getHeight();
 		
+		Nodos = new Nodo[38][38];
+		for(int j=0;j<38;j++)
+			for(int i=0;i<38;i++){
+				Nodo nodo = new Nodo(i,j);
+				Nodos[j][i] = nodo;
+			}	
+		
+		textures = new TextureAtlas(Gdx.files.internal("data/texturas.pack"));
+		
 		factorW = Width/1280;
 		factorH = Height/800;
 		
@@ -227,16 +237,22 @@ public class StartGameScreen extends AbstractScreen{
 		camera = new OrthographicCamera(Width,Height);
 		batch = new SpriteBatch();
 		
+		
+		
 		Data.setIDMap(1);
 		Data.setGold(150);
 		Data.setTime(90);
+		Data.idtowerA = 1;
+		Data.idtowerB = 1;
+		
+		Mapa = game.mNativeFunctions.getMapData(1);
+		crearTorres(Mapa);	
 		
 		Json json = new Json();
 		System.out.println(json.toJson(Data));
 		
 		funciones = new Funciones(factorH);
-		
-		textures = new TextureAtlas(Gdx.files.internal("data/texturas.pack"));
+	
 		joypadtextures = new TextureAtlas(Gdx.files.internal("data/joypad.pack"));
 		
 		MapBack = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("data/terreno2.png")),0,0,2000,1260));
@@ -244,14 +260,7 @@ public class StartGameScreen extends AbstractScreen{
 		
 		areaTarget = textures.createSprite("loseta");
 		areaTarget.setSize(100*factorH,70*factorH);
-		areaTarget.setColor(1, 1, 1, 0.25f);
-		
-		
-		Torre = textures.createSprite("torre");
-		Torre.setSize(300*factorH,300*factorH);
-		Vector2 posTorre = funciones.SeleccionarPos(12,9);
-		Torre.setPosition(posTorre.x-losetaW/2-50*factorH, posTorre.y);
-		
+		areaTarget.setColor(1, 1, 1, 0.25f);	
 		
 		Skin skin = new Skin(Gdx.files.internal("data/controlui.json"));
 		
@@ -283,14 +292,7 @@ public class StartGameScreen extends AbstractScreen{
 		multiplexer.addProcessor(stage);
 		multiplexer.addProcessor(inputProcessor);
 		
-		Gdx.input.setInputProcessor(multiplexer);
-		
-		Nodos = new Nodo[38][38];
-		for(int j=0;j<38;j++)
-			for(int i=0;i<38;i++){
-				Nodo nodo = new Nodo(i,j);
-				Nodos[j][i] = nodo;
-			}		
+		Gdx.input.setInputProcessor(multiplexer);	
 		
 		NODOSELECTED  = null;
 		AlcanceMP = new LinkedList<Vector2>();
@@ -817,6 +819,55 @@ public class StartGameScreen extends AbstractScreen{
 	    }
 		      
 		return listcards;
+	}
+	
+	private void crearTorres(MapData mapdata){
+		ObjectData tdataA = game.mNativeFunctions.getTowerData(1);
+		Vector2 posA = mapdata.posA;
+		System.out.println(tdataA.nombre);
+		Objeto TorreA = new Objeto(this,tdataA);
+		ObjectData tdataB = game.mNativeFunctions.getTowerData(1);
+		Objeto TorreB = new Objeto(this,tdataB);
+		Vector2 posB = mapdata.posB;
+		
+		TorreA.setPositionFicha(posA.x,posA.y);
+    	
+    	Nodos[(int)posA.y][(int)posA.x].ficha=TorreA;
+    	Nodos[(int)posA.y][(int)posA.x].size = 2;
+    	Nodos[(int)posA.y][(int)posA.x].ficha.IdFicha = indexFicha;
+    	
+    	Nodos[(int)posA.y][(int)posA.x].ocupado = true;
+    	Nodos[(int)posA.y][(int)posA.x+1].ocupado = true;
+    	Nodos[(int)posA.y+1][(int)posA.x].ocupado = true;
+    	Nodos[(int)posA.y+1][(int)posA.x+1].ocupado = true;
+    	
+    	Nodos[(int)posA.y][(int)posA.x+1].Reflect = true;
+    	Nodos[(int)posA.y+1][(int)posA.x].Reflect = true;
+    	Nodos[(int)posA.y+1][(int)posA.x+1].Reflect = true;
+    	
+    	Nodos[(int)posA.y][(int)posA.x+1].nodoReflect = posA;
+    	Nodos[(int)posA.y+1][(int)posA.x].nodoReflect = posA;
+    	Nodos[(int)posA.y+1][(int)posA.x+1].nodoReflect =posA;
+    	
+    	TorreB.setPositionFicha(posB.x,posB.y);
+    	
+    	Nodos[(int)posB.y][(int)posB.x].ficha=TorreB;
+    	Nodos[(int)posB.y][(int)posB.x].size = 2;
+    	Nodos[(int)posB.y][(int)posB.x].ficha.IdFicha = indexFicha;
+    	
+    	Nodos[(int)posB.y][(int)posB.x].ocupado = true;
+    	Nodos[(int)posB.y][(int)posB.x+1].ocupado = true;
+    	Nodos[(int)posB.y+1][(int)posB.x].ocupado = true;
+    	Nodos[(int)posB.y+1][(int)posB.x+1].ocupado = true;
+    	
+    	Nodos[(int)posB.y][(int)posB.x+1].Reflect = true;
+    	Nodos[(int)posB.y+1][(int)posB.x].Reflect = true;
+    	Nodos[(int)posB.y+1][(int)posB.x+1].Reflect = true;
+    	
+    	Nodos[(int)posB.y][(int)posB.x+1].nodoReflect = posB;
+    	Nodos[(int)posB.y+1][(int)posB.x].nodoReflect = posB;
+    	Nodos[(int)posB.y+1][(int)posB.x+1].nodoReflect =posB;		
+				
 	}
 	
 	@Override

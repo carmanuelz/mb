@@ -2,10 +2,7 @@ package com.mb.utils;
 
 import java.sql.Connection;
 
-import com.mb.data.CardData;
-import com.mb.data.EquipData;
-import com.mb.data.ObjectData;
-import com.mb.data.SpellData;
+import com.mb.data.*;
 
 public interface NativeFunctions {
 	
@@ -16,10 +13,11 @@ public interface NativeFunctions {
 	
 	public ObjectData getHeroData(int id);
 	public ObjectData getRelicData(int id);
-	public ObjectData getTowerData(int id);
-	
+	public ObjectData getTowerData(int id);	
 	public EquipData getEquipData(int id);
 	public SpellData getSpellData(int id);
 	
 	public CardData getCardData(int id);
+	
+	public MapData getMapData(int id);
 }

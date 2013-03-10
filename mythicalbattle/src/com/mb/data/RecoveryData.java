@@ -37,21 +37,19 @@ public class RecoveryData {
 	}
 	
 	public ObjectData getTowerData(int id){
-		ObjectData fichaData = new ObjectData();
+		ObjectData torre = new ObjectData();
 		try {
 			statement = con.createStatement();
-		    resultSet = statement.executeQuery("SELECT * FROM hero where idhero ="+id);
-		    while (resultSet.next())
-		    {
-		    	fichaData.nombre = resultSet.getString("nombre");
-		    	fichaData.descripcion = resultSet.getString("descripcion");
-		    	
-		    }
+		    resultSet = statement.executeQuery("SELECT * FROM torre where idtorre ="+id);
+		    while (resultSet.next()){
+		    	torre.nombre = resultSet.getString("nombre");
+		    	torre.descripcion = resultSet.getString("descripcion");
+		    	}
 		    }
 		    catch (SQLException ex) {
 		       System.out.println(ex);
 		    }
-		return fichaData;
+		return torre;
 	}
 	
 	public SpellData getSpellData(int id){
@@ -72,4 +70,23 @@ public class RecoveryData {
 		return fichaData;
 	}
 	
+	public MapData getMapData(int id){
+		MapData Mapa = new MapData();
+		try {
+			statement = con.createStatement();
+		    resultSet = statement.executeQuery("SELECT * FROM map where idmap ="+id);
+		    while (resultSet.next())
+		    {
+		    	Mapa.nombre = resultSet.getString("nombre");
+		    	Mapa.descripcion = resultSet.getString("descripcion");
+		    	Mapa.setPosA(Integer.parseInt(resultSet.getString("ax")), Integer.parseInt(resultSet.getString("ay")));
+		    	Mapa.setPosB(Integer.parseInt(resultSet.getString("bx")), Integer.parseInt(resultSet.getString("by")));
+		    }
+		    }
+		    catch (SQLException ex) {
+		       System.out.println(ex);
+		    }
+		  
+		return Mapa;
+	}
 }

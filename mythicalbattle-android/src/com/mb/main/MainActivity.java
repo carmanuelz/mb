@@ -30,6 +30,7 @@ import android.util.Log;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.mb.data.MapData;
 import com.mb.data.RecoveryData;
 import com.mb.data.EquipData;
 import com.mb.data.ObjectData;
@@ -238,6 +239,11 @@ public Connection getConnection() {
 	public CardData getCardData(int id) {
 		// TODO Auto-generated method stub
 		return RecoveryData.getCardData(id);
+	}
+	@Override
+	public MapData getMapData(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

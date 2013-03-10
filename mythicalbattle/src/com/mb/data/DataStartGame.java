@@ -4,6 +4,9 @@ public class DataStartGame {
 	private int IDMAP;
 	private int TIME;
 	private int GOLD;
+
+	public int idtowerA;
+	public int idtowerB;
 	
 	public void setIDMap(int id){
 		IDMAP = id;
