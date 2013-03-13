@@ -189,17 +189,8 @@ public class StartGameScreen extends AbstractScreen{
 		if(atdragged&&(touchTarget || spelldragged))
 			AreaDraw();
 		
-		for(int j = 37;j>=0;j--)
-			for (int i = 0; i<=37; i++){
-				if(Nodos[i][j].ficha!=null){
-					Nodos[i][j].ficha.FichaDraw(batch);
-					if(Nodos[i][j].size == 2){
-						if((i+2)<38 && (j+1)<38 && Nodos[i+2][j+1].ficha!=null)
-						Nodos[i+2][j+1].ficha.FichaDraw(batch);
-					}
-				}
-						
-			}
+		renderObjects();
+		
 		if(dragged)
 			DraggedFicha.draw(batch);
 		
@@ -210,6 +201,22 @@ public class StartGameScreen extends AbstractScreen{
         
         cardStage.act(Gdx.graphics.getDeltaTime());
         cardStage.draw();
+	}
+	
+	public void renderObjects(){
+		for(int i = 37; i>=0;i--)
+			for(int j = 0; j <= i; j++){
+				if(Nodos[i-j][i].ficha!=null){
+					Nodos[i-j][i].ficha.FichaDraw(batch);
+				}
+			}
+		
+		for(int j = 1; j>37;j++)
+			for(int i = 0; i <= 36; i++){
+				if(Nodos[i+1][i].ficha!=null){
+					Nodos[i+1][i].ficha.FichaDraw(batch);
+				}
+			}
 	}
 
 	@Override
@@ -428,7 +435,6 @@ public class StartGameScreen extends AbstractScreen{
 		Deck.addListener(cardListener);
 		Card.addListener(cardListener);
 	}
-	
 	
 
 	@Override
