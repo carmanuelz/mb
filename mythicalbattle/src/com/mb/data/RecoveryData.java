@@ -23,6 +23,7 @@ public class RecoveryData {
 		    	 hero.nombre = resultSet.getString("nombre");
 		    	 hero.descripcion = resultSet.getString("descripcion");
 		    	 hero.size = Integer.parseInt(resultSet.getString("size"));
+		    	 hero.Type = 1;
 		     }
 		    }
 		    catch (SQLException ex) {
@@ -44,6 +45,8 @@ public class RecoveryData {
 		    while (resultSet.next()){
 		    	torre.nombre = resultSet.getString("nombre");
 		    	torre.descripcion = resultSet.getString("descripcion");
+		    	torre.size = 2;
+		    	torre.Type = 3;
 		    	}
 		    }
 		    catch (SQLException ex) {

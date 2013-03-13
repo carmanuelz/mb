@@ -57,7 +57,7 @@ public class Objeto {
 	public float offsetH;
 	public float offsetW;
 	public int Size;//1 o 2
-	private int Type;//Heroe = 1, reliquia = 2, Torre 3
+	public int Type;//Heroe = 1, reliquia = 2, Torre 3
 	
 	/*>>>>>>>>>>>>>>>>>>>>>>>>*/
 	//private boolean Enemy;
@@ -104,10 +104,17 @@ public class Objeto {
 		startgame = startgamescreen;
 		data = Data;
 		size = Data.size;
+		Type = Data.Type;
 		
 		if(size == 2){
-			offsetH = -10*startgame.factorH;
+			if(Type == 1){
+			offsetH = -11*startgame.factorH;
 			offsetW = 50*startgame.factorH;
+			}
+			if(Type == 3){
+				offsetH = -33*startgame.factorH;
+				offsetW = 50*startgame.factorH;
+			}
 		}
 		else{
 			offsetH = 11*startgame.factorH;

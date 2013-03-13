@@ -44,7 +44,6 @@ import com.mb.data.CardData;
 import com.mb.data.DataStartGame;
 import com.mb.data.MapData;
 import com.mb.data.ObjectData;
-import com.mb.data.TowerData;
 import com.mb.objects.Nodo;
 import com.mb.objects.Objeto;
 import com.mb.utils.Funciones;
@@ -190,10 +189,16 @@ public class StartGameScreen extends AbstractScreen{
 		if(atdragged&&(touchTarget || spelldragged))
 			AreaDraw();
 		
-		for(int i = 37;i>=0;i--)
-			for (int j = 0; j<=37; j++){
-				if(Nodos[j][i].ficha!=null)
-					Nodos[j][i].ficha.FichaDraw(batch);
+		for(int j = 37;j>=0;j--)
+			for (int i = 0; i<=37; i++){
+				if(Nodos[i][j].ficha!=null){
+					Nodos[i][j].ficha.FichaDraw(batch);
+					if(Nodos[i][j].size == 2){
+						if((i+2)<38 && (j+1)<38 && Nodos[i+2][j+1].ficha!=null)
+						Nodos[i+2][j+1].ficha.FichaDraw(batch);
+					}
+				}
+						
 			}
 		if(dragged)
 			DraggedFicha.draw(batch);
@@ -556,8 +561,8 @@ public class StartGameScreen extends AbstractScreen{
 			 * luego se procede a asignar el nuevo valor a la variable de estado y se agregan los actores que pertenecen a la
 			 * nueva ficha seleccionada */
 			case SELECTED	:
-					if(!Nodos[(int)indexTemp.y][(int)indexTemp.x].ocupado){
-						if(Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.ifPasos(indexTemp)){
+					if(!Nodos[(int)indexTemp.y][(int)indexTemp.x].ocupado ){
+						if(Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.ifPasos(indexTemp)&& Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.Type == 1){
 							if(SIZESELECTED == 2){
 								indexTemp = funciones.getReflect(indexTemp, Nodos);
 								List<Vector2> pasos = funciones.getPasos(indexTemp, Nodos);
@@ -691,6 +696,8 @@ public class StartGameScreen extends AbstractScreen{
 	}
 	
 	public void Unselect(){
+		if(NODOSELECTED!=null)
+			Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.unselected();
 		cardStage.clear();
 		ESTADO = UNSELECTED;
 		NODOSELECTED = null;
