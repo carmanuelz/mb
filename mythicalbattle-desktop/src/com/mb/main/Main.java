@@ -24,6 +24,7 @@ import com.mb.data.EquipData;
 import com.mb.data.ObjectData;
 import com.mb.data.SpellData;
 import com.mb.data.CardData; 
+import com.mb.net.ObjectEchoClientHandler;
 import com.mb.screens.MainScreen;
 import com.mb.utils.NativeFunctions;
 
