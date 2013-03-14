@@ -205,16 +205,16 @@ public class StartGameScreen extends AbstractScreen{
 	
 	public void renderObjects(){
 		for(int i = 37; i>=0;i--)
-			for(int j = 0; j <= i; j++){
-				if(Nodos[i-j][i].ficha!=null){
-					Nodos[i-j][i].ficha.FichaDraw(batch);
+			for(int j = 0; j <= 37-i; j++){
+				if(Nodos[j][j+i].ficha!=null){
+					Nodos[j][j+i].ficha.FichaDraw(batch);
 				}
 			}
 		
-		for(int j = 1; j>37;j++)
-			for(int i = 0; i <= 36; i++){
-				if(Nodos[i+1][i].ficha!=null){
-					Nodos[i+1][i].ficha.FichaDraw(batch);
+		for(int j = 1; j<37;j++)
+			for(int i = 0; i <= 37-j; i++){
+				if(Nodos[i+j][i].ficha!=null){
+					Nodos[i+j][i].ficha.FichaDraw(batch);
 				}
 			}
 	}
