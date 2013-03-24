@@ -42,7 +42,7 @@ import com.mb.utils.NativeFunctions;
 
 public class MainActivity extends AndroidApplication implements NativeFunctions {
 		
-	private static String file_url = "https://dl.dropbox.com/u/79250909/mythbattle.sqlite";	
+	private static String file_url = "http://lazonanegativa.com/mb/mythbattle.sqlite";	
 	String url = "jdbc:sqldroid:/data/data/com.me.mygdxgame/files/mythbattle.sqlite";
 	private Connection connection;
 	public RecoveryData RecoveryData;
