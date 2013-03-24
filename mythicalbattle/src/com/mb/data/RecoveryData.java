@@ -73,8 +73,8 @@ public class RecoveryData {
 		return fichaData;
 	}
 	
-	public MapData getMapData(int id){
-		MapData Mapa = new MapData();
+	public DescriptionMapData getMapData(int id){
+		DescriptionMapData Mapa = new DescriptionMapData();
 		try {
 			statement = con.createStatement();
 		    resultSet = statement.executeQuery("SELECT * FROM map where idmap ="+id);
@@ -82,8 +82,7 @@ public class RecoveryData {
 		    {
 		    	Mapa.nombre = resultSet.getString("nombre");
 		    	Mapa.descripcion = resultSet.getString("descripcion");
-		    	Mapa.setPosA(Integer.parseInt(resultSet.getString("ax")), Integer.parseInt(resultSet.getString("ay")));
-		    	Mapa.setPosB(Integer.parseInt(resultSet.getString("bx")), Integer.parseInt(resultSet.getString("by")));
+		    	Mapa.data = resultSet.getString("data");
 		    }
 		    }
 		    catch (SQLException ex) {

@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 public class Nodo {
 	
 	public Objeto ficha;
-	private int propiedad;
 	public Nodo parent;
 	public boolean ocupado;
 	public boolean closed;
@@ -25,7 +24,6 @@ public class Nodo {
 	public Nodo(int initx, int inity){
 		ficha = null;
 		parent = null;
-		propiedad = 0;
 		ocupado = false;
 		opened = false;
 		closed = false;
@@ -40,19 +38,11 @@ public class Nodo {
 		blocked = false;
 	}
 	
-	public void setPropiedad(int propiedadset){
-		propiedad = propiedadset;
-	}
-	
 	public void setPosicion(int setx, int sety){
 		posicion.x= setx;
 		x = setx;
 		posicion.y= sety;
 		y = sety;
-	}
-	
-	public int getPropiedad(){
-		return propiedad;
 	}
 	
 	public void clean(){

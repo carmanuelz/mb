@@ -16,6 +16,7 @@ public class Funciones {
 	private float fichaH;
 	private float dimH;
 	private float dimW;
+	private float Dmid;
 	
 	public static final int UNSELECTED = 0;
 	public static final int SELECTED = 1;
@@ -29,10 +30,10 @@ public class Funciones {
 	public static final int ALETYPE = 6;
 	public static final int ATYPE = 7;
 	
-	public Funciones(float factH){
-		
-		dimW = 19*100;
-		dimH = 19*70;
+	public Funciones(float factH, float D){
+		Dmid = D/2;
+		dimW = Dmid*100;
+		dimH = Dmid*70;
 		
 		factorH = factH;
 		Y0 = dimH*factorH;

@@ -18,7 +18,7 @@ import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-import com.mb.data.MapData;
+import com.mb.data.DescriptionMapData;
 import com.mb.data.RecoveryData;
 import com.mb.data.EquipData;
 import com.mb.data.ObjectData;
@@ -176,11 +176,11 @@ public CardData getCardData(int id) {
 	return card;
 }
 @Override
-public MapData getMapData(int id) {
+public DescriptionMapData getMapData(int id) {
 	// TODO Auto-generated method stub
 	connection = getConnection();
 	RecoveryData = new RecoveryData(connection);
-	MapData map = RecoveryData.getMapData(id);
+	DescriptionMapData map = RecoveryData.getMapData(id);
 	try {
 		connection.close();
 	} catch (SQLException e) {

@@ -19,5 +19,5 @@ public interface NativeFunctions {
 	
 	public CardData getCardData(int id);
 	
-	public MapData getMapData(int id);
+	public DescriptionMapData getMapData(int id);
 }

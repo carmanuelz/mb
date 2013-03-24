@@ -19,6 +19,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,8 +43,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Json;
 import com.mb.data.CardData;
 import com.mb.data.DataStartGame;
-import com.mb.data.MapData;
+import com.mb.data.DescriptionMapData;
 import com.mb.data.ObjectData;
+import com.mb.data.PropertiesMapData;
+import com.mb.objects.MapLozeta;
 import com.mb.objects.Nodo;
 import com.mb.objects.Objeto;
 import com.mb.utils.Funciones;
@@ -71,7 +74,8 @@ public class StartGameScreen extends AbstractScreen{
 	public Sprite MapBack;
 	
 	private Sprite areaTarget;
-	private MapData Mapa;
+	private DescriptionMapData MapaDescripcion;
+	private PropertiesMapData MapaPropiedades;
 	
 	private float porcentx;
 	private float porcenty;
@@ -97,12 +101,24 @@ public class StartGameScreen extends AbstractScreen{
 	
 	public Funciones funciones;
 	
-	public Nodo[][] Nodos;
 	public List<CardData> listcards;
 	
 	private Vector2 TempPosicionMat;
 	
 	public int indexFicha = 0;
+	
+	/*>>>>>>>>>>>>> Datos de Mapa >>>>>>>>>>>>>>>>>>>*/
+	
+	public Nodo[][] Nodos;
+	public MapLozeta[][] MapaLozetas;
+	private int WidthLozetas;
+	private int HeightLozetas;
+	private int WidthMapTexture;
+	private int HeightMapTexture;
+	private Vector2 PositionTorreA;
+	private Vector2 PositionTorreB;
+	private String AssetPathMap;
+	public float Dimension;
 	
 	/*>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>*/
 	
@@ -167,8 +183,7 @@ public class StartGameScreen extends AbstractScreen{
 		if((camera.position.x+porcentx)>CamMaxX || (camera.position.x+porcentx)<CamMinX)
         	porcentx = 0;
         if((camera.position.y+porcenty)>CamMaxY || (camera.position.y+porcenty)<CamMinY)
-        	porcenty = 0;
-        
+        	porcenty = 0;        
 		camera.translate(porcentx, porcenty, 0);
 		mod[2] -= porcentx;
 		mod[3] -= porcenty;
@@ -225,10 +240,37 @@ public class StartGameScreen extends AbstractScreen{
 		Width = Gdx.graphics.getWidth();
 		Height = Gdx.graphics.getHeight();
 		
+		Json json = new Json();		
+		
+		Data.setIDMap(1);
+		Data.setGold(150);
+		Data.setTime(90);
+		Data.idtowerA = 1;
+		Data.idtowerB = 1;
+		
+		/*>>>>> Cargando datos de Mapa >>>>>>*/
+		
+		MapaDescripcion = game.mNativeFunctions.getMapData(1);
+		MapaPropiedades = json.fromJson(PropertiesMapData.class, Gdx.files.internal("data/"+MapaDescripcion.data));
+		MapaLozetas = MapaPropiedades.getMapLozetas();
+		WidthLozetas = MapaPropiedades.getWidthLozetas();
+		HeightLozetas = MapaPropiedades.getWidthLozetas();
+		WidthMapTexture = MapaPropiedades.getWidth();
+		HeightMapTexture = MapaPropiedades.getHeight();
+		PositionTorreA = MapaPropiedades.getTorreA();
+		PositionTorreB = MapaPropiedades.getTorreB();
+		AssetPathMap = MapaPropiedades.getAssetPath();
+		Dimension = WidthLozetas + HeightLozetas;
+		
+		/*>>>>>>> Fin Cargado de Mapa >>>>>>>*/
+		
+		
 		Nodos = new Nodo[38][38];
 		for(int j=0;j<38;j++)
 			for(int i=0;i<38;i++){
 				Nodo nodo = new Nodo(i,j);
+				if(MapaLozetas[j][i].getPropiedad()==-1)
+					nodo.blocked = true;
 				Nodos[j][i] = nodo;
 			}	
 		
@@ -240,34 +282,24 @@ public class StartGameScreen extends AbstractScreen{
 		losetaW = 100*factorH;
 		losetaH = 70*factorH;
 		
-		CamMaxX = (2000*factorH-Width)/2;
-		CamMinX = -(2000*factorH-Width)/2;
+		CamMaxX = (1800*factorH-Width)/2;
+		CamMinX = -(2200*factorH-Width)/2;
 		
-		CamMaxY = (1260*factorH-Height)/2-losetaW;
-		CamMinY = -(1260*factorH-Height)/2-losetaH;
+		CamMaxY = (1400*factorH-Height)/2-losetaW;
+		CamMinY = -(1120*factorH-Height)/2-losetaH;
 		
 		camera = new OrthographicCamera(Width,Height);
 		batch = new SpriteBatch();
 		
-		
-		
-		Data.setIDMap(1);
-		Data.setGold(150);
-		Data.setTime(90);
-		Data.idtowerA = 1;
-		Data.idtowerB = 1;
-		
-		Mapa = game.mNativeFunctions.getMapData(1);
-		crearTorres(Mapa);	
-		
-		Json json = new Json();
+		crearTorres();
+				
 		System.out.println(json.toJson(Data));
 		
-		funciones = new Funciones(factorH);
+		funciones = new Funciones(factorH,Dimension);
 	
 		joypadtextures = new TextureAtlas(Gdx.files.internal("data/joypad.pack"));
 		
-		MapBack = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("data/terreno2.png")),0,0,2000,1260));
+		MapBack = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("data/"+AssetPathMap)),0,0,WidthMapTexture,HeightMapTexture));
 		MapBack.setSize(MapBack.getWidth()*factorH, MapBack.getHeight()*factorH);
 		
 		areaTarget = textures.createSprite("loseta");
@@ -311,9 +343,7 @@ public class StartGameScreen extends AbstractScreen{
 		AlcanceHabilidad = new LinkedList<Vector2>();
 		listTarget = new LinkedList<Vector2>();
 		
-		Vector2 posMapaBack = funciones.SeleccionarPos(0,18);
-		
-		MapBack.setPosition(posMapaBack.x, posMapaBack.y);
+		MapBack.setPosition((-WidthMapTexture/2-100)*factorH, -HeightMapTexture*factorH/2);
 		
 	}
 	
@@ -385,11 +415,11 @@ public class StartGameScreen extends AbstractScreen{
 	         @Override
 	         public void changed (ChangeEvent event, Actor actor) {
 	        	 camera.zoom = 1+slider.getValue()/100;
-	        	 CamMaxX = (2000*factorH-Width*camera.zoom)/2;
-	        	 CamMinX = -(2000*factorH-Width*camera.zoom)/2;
+	        	 CamMaxX = (1800*factorH-Width*camera.zoom)/2;
+	        	 CamMinX = -(2200*factorH-Width*camera.zoom)/2;
 	     		
-	        	 CamMaxY = (1260*factorH-Height*camera.zoom)/2-35*factorH;
-	        	 CamMinY = -(1260*factorH-Height*camera.zoom)/2-35*factorH;
+	        	 CamMaxY = (1400*factorH-Height*camera.zoom)/2-70*factorH;
+	        	 CamMinY = -(1120*factorH-Height*camera.zoom)/2-70*factorH;
 	        	 
 	        	 float x = 0;
 	     	   	float y = 0;
@@ -529,7 +559,7 @@ public class StartGameScreen extends AbstractScreen{
 			
 			/*Se recupera un puntero con la ubicacion en la matris del juego*/
 			Vector2 indexTemp = funciones.CalcularPosicionMat(puntero.x, puntero.y);
-			
+			System.out.println(indexTemp);
 			/*Se procede a ejecutar los eventes deacuerdo al estado actual del juego*/
 			switch (ESTADO){
 			/*Si el estado es UNSELECTED se verificara si la posicion seleccionada esta vacia o pertenece a una ficha,
@@ -569,49 +599,7 @@ public class StartGameScreen extends AbstractScreen{
 			case SELECTED	:
 					if(!Nodos[(int)indexTemp.y][(int)indexTemp.x].ocupado ){
 						if(Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.ifPasos(indexTemp)&& Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.Type == 1){
-							if(SIZESELECTED == 2){
-								indexTemp = funciones.getReflect(indexTemp, Nodos);
-								List<Vector2> pasos = funciones.getPasos(indexTemp, Nodos);
-								
-								Nodo nodoAUX = Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x];
-								
-								Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x] = new Nodo((int)NODOSELECTED.x,(int)NODOSELECTED.y);
-								Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x+1] = new Nodo((int)NODOSELECTED.x+1,(int)NODOSELECTED.y);
-								Nodos[(int)NODOSELECTED.y+1][(int)NODOSELECTED.x] = new Nodo((int)NODOSELECTED.x,(int)NODOSELECTED.y+1);
-								Nodos[(int)NODOSELECTED.y+1][(int)NODOSELECTED.x+1] = new Nodo((int)NODOSELECTED.x+1,(int)NODOSELECTED.y+1);
-								
-								Nodos[(int)indexTemp.y][(int)indexTemp.x] = nodoAUX;
-								
-				            	Nodos[(int)indexTemp.y][(int)indexTemp.x+1].ocupado = true;
-				            	Nodos[(int)indexTemp.y+1][(int)indexTemp.x].ocupado = true;
-				            	Nodos[(int)indexTemp.y+1][(int)indexTemp.x+1].ocupado = true;
-				            	
-				            	Nodos[(int)indexTemp.y][(int)indexTemp.x+1].Reflect = true;
-				            	Nodos[(int)indexTemp.y+1][(int)indexTemp.x].Reflect = true;
-				            	Nodos[(int)indexTemp.y+1][(int)indexTemp.x+1].Reflect = true;
-				            	
-				            	Nodos[(int)indexTemp.y][(int)indexTemp.x+1].nodoReflect = indexTemp;
-				            	Nodos[(int)indexTemp.y+1][(int)indexTemp.x].nodoReflect = indexTemp;
-				            	Nodos[(int)indexTemp.y+1][(int)indexTemp.x+1].nodoReflect = indexTemp;
-				            	
-				            	NODOSELECTED = indexTemp;
-				            									
-								Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.MoveFicha(pasos, indexTemp);
-								
-								Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].setPosicion((int)indexTemp.x,(int) indexTemp.y);
-								Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.selected();
-							}
-							
-							else{
-								List<Vector2> pasos = funciones.getPasos(indexTemp, Nodos);
-								
-								Nodos[(int)indexTemp.y][(int)indexTemp.x] = Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x];
-								Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x] = new Nodo((int)NODOSELECTED.x,(int)NODOSELECTED.y);
-								NODOSELECTED = indexTemp;
-								Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.MoveFicha(pasos, indexTemp);
-								Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].x = (int)NODOSELECTED.x;
-								Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].y = (int)NODOSELECTED.y;
-							}
+							Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.MoveFicha(indexTemp);
 						}
 						else{ 
 							Unselect();
@@ -834,14 +822,14 @@ public class StartGameScreen extends AbstractScreen{
 		return listcards;
 	}
 	
-	private void crearTorres(MapData mapdata){
+	private void crearTorres(){
 		ObjectData tdataA = game.mNativeFunctions.getTowerData(1);
-		Vector2 posA = mapdata.posA;
+		Vector2 posA = PositionTorreA;
 		System.out.println(tdataA.nombre);
 		Objeto TorreA = new Objeto(this,tdataA);
 		ObjectData tdataB = game.mNativeFunctions.getTowerData(1);
 		Objeto TorreB = new Objeto(this,tdataB);
-		Vector2 posB = mapdata.posB;
+		Vector2 posB = PositionTorreB;
 		
 		TorreA.setPositionFicha(posA.x,posA.y);
     	

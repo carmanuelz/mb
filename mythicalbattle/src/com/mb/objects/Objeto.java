@@ -8,14 +8,11 @@ import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Timeline;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
-import aurelienribon.tweenengine.TweenManager;
 import aurelienribon.tweenengine.TweenPaths;
-import aurelienribon.tweenengine.equations.Cubic;
 import aurelienribon.tweenengine.equations.Linear;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -122,7 +119,7 @@ public class Objeto {
 		}
 		
 		IdFicha= startgame.indexFicha;
-		funciones = new Funciones(startgame.factorH);
+		funciones = new Funciones(startgame.factorH,startgame.Dimension);
 		addTexture();
 		
 		AlcanceMov = new LinkedList<Vector2>();
@@ -545,12 +542,55 @@ public class Objeto {
 		unselected();
 		return false;
 	}
-	
-	public void MoveFicha(List<Vector2> pasos,Vector2 indexTemp){
-			Pasos = pasos;
-			posicionMat = new Vector2(indexTemp);
-			funciones.CalcularAlcance(posicionMat,EP,AlcanceMov,startgame.Nodos);
+	public void MoveFicha(Vector2 Destino){
+		if(size == 2){
+			Destino = funciones.getReflect(Destino, startgame.Nodos);
+			Pasos = funciones.getPasos(Destino, startgame.Nodos);
 			
+			Nodo nodoAUX = startgame.Nodos[(int)posicionMat.y][(int)posicionMat.x];
+			
+			startgame.Nodos[(int)posicionMat.y][(int)posicionMat.x] = new Nodo((int)posicionMat.x,(int)posicionMat.y);
+			startgame.Nodos[(int)posicionMat.y][(int)posicionMat.x+1] = new Nodo((int)posicionMat.x+1,(int)posicionMat.y);
+			startgame.Nodos[(int)posicionMat.y+1][(int)posicionMat.x] = new Nodo((int)posicionMat.x,(int)posicionMat.y+1);
+			startgame.Nodos[(int)posicionMat.y+1][(int)posicionMat.x+1] = new Nodo((int)posicionMat.x+1,(int)posicionMat.y+1);
+			
+			startgame.Nodos[(int)Destino.y][(int)Destino.x] = nodoAUX;
+			
+			startgame.Nodos[(int)Destino.y][(int)Destino.x+1].ocupado = true;
+			startgame.Nodos[(int)Destino.y+1][(int)Destino.x].ocupado = true;
+			startgame.Nodos[(int)Destino.y+1][(int)Destino.x+1].ocupado = true;
+        	
+			startgame.Nodos[(int)Destino.y][(int)Destino.x+1].Reflect = true;
+			startgame.Nodos[(int)Destino.y+1][(int)Destino.x].Reflect = true;
+			startgame.Nodos[(int)Destino.y+1][(int)Destino.x+1].Reflect = true;
+        	
+			startgame.Nodos[(int)Destino.y][(int)Destino.x+1].nodoReflect = Destino;
+			startgame.Nodos[(int)Destino.y+1][(int)Destino.x].nodoReflect = Destino;
+			startgame.Nodos[(int)Destino.y+1][(int)Destino.x+1].nodoReflect = Destino;
+        	
+        	posicionMat = Destino;
+        	startgame.NODOSELECTED = Destino;				
+        	
+        	MoveExe(Destino);			
+        	startgame.Nodos[(int)posicionMat.y][(int)posicionMat.x].setPosicion((int)Destino.x,(int) Destino.y);
+        	selected();
+		}
+		
+		else{
+			Pasos = funciones.getPasos(Destino, startgame.Nodos);			
+			startgame.Nodos[(int)Destino.y][(int)Destino.x] = startgame.Nodos[(int)posicionMat.y][(int)posicionMat.x];
+			startgame.Nodos[(int)posicionMat.y][(int)posicionMat.x] = new Nodo((int)posicionMat.x,(int)posicionMat.y);
+			posicionMat = Destino;
+			startgame.NODOSELECTED = Destino;
+			MoveExe(Destino);
+			startgame.Nodos[(int)posicionMat.y][(int)posicionMat.x].x = (int)posicionMat.x;
+			startgame.Nodos[(int)posicionMat.y][(int)posicionMat.x].y = (int)posicionMat.y;
+			selected();
+		}
+	}
+	public void MoveExe(Vector2 indexTemp){
+			posicionMat = new Vector2(indexTemp);
+			funciones.CalcularAlcance(posicionMat,EP,AlcanceMov,startgame.Nodos);			
 			Vector2 paso = 	Pasos.get(Pasos.size()-1);
 			Pasos.remove(Pasos.size()-1);
 			moveTween(paso.x,paso.y);			
@@ -564,11 +604,7 @@ public class Objeto {
 					if(Pasos.size()>0){
 						Vector2 paso = Pasos.get(Pasos.size()-1);
 						Pasos.remove(Pasos.size()-1);
-						Timeline.createSequence()
-						.push(Tween.to(ficha,SpriteAccessor.POS_XY, 0.1f).target(paso.x-offsetW, paso.y+offsetH).ease(Linear.INOUT))
-						.setCallback(callback)
-						.setCallbackTriggers(TweenCallback.START | TweenCallback.COMPLETE)
-						.start(startgame.tweenManager);
+						moveTween(paso.x, paso.y);
 					}						
 					else move = true;break;
 			}
