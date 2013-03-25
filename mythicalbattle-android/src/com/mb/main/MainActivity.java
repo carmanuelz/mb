@@ -219,32 +219,85 @@ public Connection getConnection() {
 	@Override
 	public ObjectData getRelicData(int id) {
 		// TODO Auto-generated method stub
-		return RecoveryData.getRelicData(id);
+		connection = getConnection();
+		RecoveryData = new RecoveryData(connection);
+		ObjectData relic = RecoveryData.getRelicData(id);
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return relic;
 	}
 	@Override
 	public ObjectData getTowerData(int id) {
 		// TODO Auto-generated method stub
-		return RecoveryData.getTowerData(id);
+		connection = getConnection();
+		RecoveryData = new RecoveryData(connection);
+		ObjectData tower = RecoveryData.getTowerData(id);
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return tower;
 	}
 	@Override
 	public EquipData getEquipData(int id) {
 		// TODO Auto-generated method stub
-		return RecoveryData.getEquipData(id);
+		connection = getConnection();
+		RecoveryData = new RecoveryData(connection);
+		EquipData equip = RecoveryData.getEquipData(id);
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return equip;
 	}
 	@Override
 	public SpellData getSpellData(int id) {
 		// TODO Auto-generated method stub
-		return RecoveryData.getSpellData(id);
+		connection = getConnection();
+		RecoveryData = new RecoveryData(connection);
+		SpellData spell = RecoveryData.getSpellData(id);
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return spell;
 	}
 	@Override
 	public CardData getCardData(int id) {
 		// TODO Auto-generated method stub
-		return RecoveryData.getCardData(id);
+		connection = getConnection();
+		RecoveryData = new RecoveryData(connection);
+		CardData card = RecoveryData.getCardData(id);
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return card;
 	}
 	@Override
 	public DescriptionMapData getMapData(int id) {
 		// TODO Auto-generated method stub
-		return null;
+		connection = getConnection();
+		RecoveryData = new RecoveryData(connection);
+		DescriptionMapData map = RecoveryData.getMapData(id);
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return map;
 	}
-
 }
