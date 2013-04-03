@@ -203,8 +203,8 @@ public class StartGameScreen extends AbstractScreen{
 		if(atdragged&&(touchTarget || spelldragged))
 			AreaDraw();
 		
-		renderObjects();
-		
+		renderObjects(delta);
+		renderObjectEffects(batch,delta);
 		if(dragged)
 			DraggedFicha.draw(batch);
 		
@@ -217,18 +217,26 @@ public class StartGameScreen extends AbstractScreen{
         cardStage.draw();
 	}
 	
-	public void renderObjects(){
+	public void renderObjectEffects(SpriteBatch spriteBatch, float delta){
+		for(int i=0;i<37;i++)
+			for(int j=0;j<37;j++){
+				if(Nodos[i][j].ficha !=null)
+				Nodos[i][j].ficha.EffectDraw(batch, delta);
+			}
+	}
+	
+	public void renderObjects(float delta){
 		for(int i = 37; i>=0;i--)
 			for(int j = 0; j <= 37-i; j++){
 				if(Nodos[j][j+i].ficha!=null){
-					Nodos[j][j+i].ficha.FichaDraw(batch);
+					Nodos[j][j+i].ficha.FichaDraw(batch,delta);
 				}
 			}
 		
 		for(int j = 1; j<37;j++)
 			for(int i = 0; i <= 37-j; i++){
 				if(Nodos[i+j][i].ficha!=null){
-					Nodos[i+j][i].ficha.FichaDraw(batch);
+					Nodos[i+j][i].ficha.FichaDraw(batch,delta);
 				}
 			}
 	}
@@ -550,7 +558,7 @@ public class StartGameScreen extends AbstractScreen{
 			
 			/*Antes de interactuar con las fichas y el campo se verifica que la lista de fichas en
 			 *el campo no este vacia*/
-			if(indexFicha==0)
+			if(indexFicha==0 || Gdx.input.isTouched(1) || Gdx.input.isTouched(2)||Gdx.input.isTouched(3)||Gdx.input.isTouched(4))
 				return true;
 			
 			/*Se convierte el puntero a las coordenadas de el juego*/
@@ -778,6 +786,12 @@ public class StartGameScreen extends AbstractScreen{
 			    		if(atdragged){
 							atdragged=false;
 							spelldragged = false;
+							Iterator<Vector2> iter = listTarget.iterator();
+							while(iter.hasNext()){
+								Vector2 item = iter.next();
+								Nodos[(int)item.y][(int)item.x].ficha.AnimHabilidad();
+						}
+							
 							funciones.Untarget(listTarget,HABILIDAD,Nodos);
 						}
 			    	}

@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mb.actions.BallTargetSpell;
 import com.mb.data.ObjectData;
 import com.mb.screens.StartGameScreen;
 import com.mb.utils.SpriteAccessor;
@@ -50,6 +51,7 @@ public class Objeto {
 	private List<Vector2> listTargetFriend;
 	private List<Vector2> Pasos;
 	
+	private BallTargetSpell Effect;
 	/*>>>>>>>>>>>>>>>>>>>>>>>>*/
 	public float offsetH;
 	public float offsetW;
@@ -134,9 +136,11 @@ public class Objeto {
 		Atack.addListener(loadListener(3));
 		butt3.addListener(loadListener(5));
 		butt4.addListener(loadListener(7));
+		
+		Effect = new BallTargetSpell(startgame.tweenManager);
 	}
 	
-	public void FichaDraw(SpriteBatch spriteBatch){
+	public void FichaDraw(SpriteBatch spriteBatch, float delta){
 		if(targeted){
 			Vector2 pos = funciones.SeleccionarPos(posicionMat.x, posicionMat.y);
 			target.setPosition(pos.x, pos.y);
@@ -186,6 +190,7 @@ public class Objeto {
 			}
 		}
 		ficha.draw(spriteBatch);
+		
 	}
 	
 	public void addButton(Stage stage){
@@ -193,6 +198,10 @@ public class Objeto {
 		stage.addActor(Atack);
 		stage.addActor(butt3);
 		stage.addActor(butt4);
+	}
+	
+	public void EffectDraw(SpriteBatch spriteBatch, float delta){
+		Effect.render(spriteBatch, delta);
 	}
 	
 	public void RangoMovDraw(SpriteBatch spriteBatch){
@@ -239,6 +248,10 @@ public class Objeto {
 	
 	public Vector2 getPositionFicha(){
 		return posicionMat;
+	}
+	
+	public Vector2 getPositionCoorder(){
+		return new Vector2(funciones.SeleccionarPos(posicionMat.x, posicionMat.y));
 	}
 	
 	public Sprite getSprite(){
@@ -345,9 +358,9 @@ public class Objeto {
 		Tween.to(ficha, SpriteAccessor.TINT, 2f)
 		.waypoint(1, 0, 0)
 		.waypoint(1, 1, 1)
-		.waypoint(0, 1, 0)
+		.waypoint(1, 0, 0)
 		.waypoint(1, 1, 1)
-		.waypoint(0, 0, 1)
+		.waypoint(1, 0, 0)
 		.target(1, 1, 1)
 		.path(TweenPaths.linear)
 		.setCallback(callback2)
@@ -356,13 +369,14 @@ public class Objeto {
 		}
 	
 	private void aplicarHabilidad(Vector2 index){
+		Effect.init(getPositionCoorder(), startgame.Nodos[(int)index.y][(int)index.x].ficha);
 		AnimHabilidad();
 		modDefencePoints(index);
 		modEnergyPoints(index);
 		modAtackPoints(index);
 		modMagicResistencePoints(index);
 		modAmpliHitsPointsRecoveriPoints(index);
-		startgame.Nodos[(int)index.y][(int)index.x].ficha.AnimHabilidad();
+		//startgame.Nodos[(int)index.y][(int)index.x].ficha.AnimHabilidad();
 	}
 	
 	private void aplicarHabilidad(List<Vector2> indexList){
