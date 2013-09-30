@@ -805,7 +805,7 @@ public class StartGameScreen extends AbstractScreen{
 	
 	@SuppressWarnings("unchecked")
 	private List<CardData> getListCard(){
-	      String input = "";
+	      /*String input = "";
 	
 	      try {
 	         URL httpurl = new URL(
@@ -830,8 +830,32 @@ public class StartGameScreen extends AbstractScreen{
 	    	listcards = new ArrayList<CardData>();
 	    	Json json2 = new Json();
 			listcards = json2.fromJson(ArrayList.class, input);
-	    }
-		      
+	    }*/
+		Json json2 = new Json();
+	    listcards = new ArrayList<CardData>();
+	    CardData cd1 = new CardData();
+	    cd1.faccion = 1;
+	    cd1.idobjeto = 1;
+	    cd1.tipo = 1;
+	    CardData cd2 = new CardData();
+	    cd2.faccion = 1;
+	    cd2.idobjeto = 2;
+	    cd2.tipo = 1;
+	    CardData cd3 = new CardData();
+	    cd3.faccion = 1;
+	    cd3.idobjeto = 3;
+	    cd3.tipo = 1;
+	    CardData cd4 = new CardData();
+	    cd4.faccion = 1;
+	    cd4.idobjeto = 1;
+	    cd4.tipo = 3;
+	    
+	    listcards.add(cd1);
+	    listcards.add(cd2);
+	    listcards.add(cd3);
+	    listcards.add(cd4);
+	    
+	    System.out.println(json2.toJson(listcards));
 		return listcards;
 	}
 	
