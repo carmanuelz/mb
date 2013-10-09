@@ -56,8 +56,8 @@ public class Funciones {
 		if(aux.x<0)
 			aux.x=0;
 		Vector2 posicion = new Vector2();
-		posicion.x = Math.abs(aux.x);
-		posicion.y = Math.abs(aux.y);
+		posicion.x = Math.abs(aux.x)+1;
+		posicion.y = Math.abs(aux.y)+1;
 		return posicion;
 	}
 	
@@ -67,7 +67,7 @@ public class Funciones {
 	}
 	public Vector2 SeleccionarPos(float x, float y){
 		Vector2 posicion = new Vector2(0,0);
-		posicion.x = (-dimW+(x+y)*50)*factorH;
+		posicion.x = (-dimW-100+(x+y)*50)*factorH;
 		posicion.y = (-35+x*35-y*35)*factorH;
 		return posicion;
 	}
