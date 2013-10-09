@@ -41,12 +41,12 @@ import com.mb.screens.MainScreen;
 import com.mb.utils.NativeFunctions;
 
 public class MainActivity extends AndroidApplication implements NativeFunctions {
-		
+
 	private static String file_url = "http://lazonanegativa.com/mb/mythbattle.sqlite";	
 	String url = "jdbc:sqldroid:/data/data/com.me.mygdxgame/files/mythbattle.sqlite";
 	private Connection connection;
 	public RecoveryData RecoveryData;
-	
+
     public int filesize = 0;
     public int percent = 0;
     
@@ -59,7 +59,7 @@ public class MainActivity extends AndroidApplication implements NativeFunctions 
         initialize(new MainScreen(this), cfg);
     }
 public void cliente(){
-	
+
     	
     	ClientBootstrap bootstrap = new ClientBootstrap(
                 new NioClientSocketChannelFactory(
@@ -119,7 +119,7 @@ public Connection getConnection() {
 		protected void onPreExecute() {
 			super.onPreExecute();
 		}
-		
+
 		public String getSize() {
 		      String input = "";
 
@@ -142,7 +142,7 @@ public Connection getConnection() {
 		      } 
 		      return input;
 		   }
-	
+
 		/**
 		 * Downloading file in background thread
 		 * */
@@ -157,42 +157,42 @@ public Connection getConnection() {
 	            conection.connect();
 	            // getting file length
 	            int lenghtOfFile = filesize;
-	
+
 	            // input stream to read file - with 8k buffer
 	            InputStream input = new BufferedInputStream(url.openStream(), 8192);
-	       
+
 	            // Output stream to write file
 	            OutputStream output = openFileOutput("mythbattle.sqlite", Context.MODE_PRIVATE);
 	            byte data[] = new byte[1024];
-	
+
 	            long total = 0;
-	
+
 	            while ((count = input.read(data)) != -1) {
 	                total += count;
 	                // publishing the progress....
 	                // After this onProgressUpdate will be called
 	                percent=(int)((total*100)/lenghtOfFile);
-	                
+
 	                // writing data to file
 	                output.write(data, 0, count);
 	            }
-	
+
 	            // flushing output
 	            output.flush();
-	            
+
 	            // closing streams
 	            output.close();
 	            input.close();
-	            
+
 	        } catch (Exception e) {
 	        	Log.e("Error: ", e.getMessage());
 	        }
-	        
+
 	        return null;
 		}
 	}
 
-	
+
 
 	@Override
 	public float getPercent() {
@@ -201,7 +201,7 @@ public Connection getConnection() {
 			return percent;
 		return 0;
 	}
-	
+
 	@Override
 	public ObjectData getHeroData(int id) {
 		// TODO Auto-generated method stub

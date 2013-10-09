@@ -1,10 +1,5 @@
 package com.mb.screens;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -261,13 +256,15 @@ public class StartGameScreen extends AbstractScreen{
 		MapaPropiedades = json.fromJson(PropertiesMapData.class, Gdx.files.internal("data/"+MapaDescripcion.data));
 		MapaLozetas = MapaPropiedades.getMapLozetas();
 		WidthLozetas = MapaPropiedades.getWidthLozetas();
-		HeightLozetas = MapaPropiedades.getWidthLozetas();
+		HeightLozetas = MapaPropiedades.getHeightLozetas();
 		WidthMapTexture = MapaPropiedades.getWidth();
 		HeightMapTexture = MapaPropiedades.getHeight();
 		PositionTorreA = MapaPropiedades.getTorreA();
 		PositionTorreB = MapaPropiedades.getTorreB();
 		AssetPathMap = MapaPropiedades.getAssetPath();
 		Dimension = WidthLozetas + HeightLozetas;
+		
+		System.out.println(WidthLozetas +"  "+ HeightLozetas);
 		
 		/*>>>>>>> Fin Cargado de Mapa >>>>>>>*/
 		
@@ -351,6 +348,7 @@ public class StartGameScreen extends AbstractScreen{
 		listTarget = new LinkedList<Vector2>();
 		
 		MapBack.setPosition((-WidthMapTexture/2-100)*factorH, -HeightMapTexture*factorH/2);
+        updateScreen();
 		
 	}
 	
@@ -398,6 +396,33 @@ public class StartGameScreen extends AbstractScreen{
 		CardMagic.setPosition(300, 420);
 	}
 	
+	private void updateScreen(){
+		camera.zoom = 1+slider.getValue()/100;
+	   	 CamMaxX = (1800*factorH-Width*camera.zoom)/2;
+	   	 CamMinX = -(2200*factorH-Width*camera.zoom)/2;
+			
+	   	 CamMaxY = (1400*factorH-Height*camera.zoom)/2-70*factorH;
+	   	 CamMinY = -(1120*factorH-Height*camera.zoom)/2-70*factorH;
+	   	 
+	   	 float x = 0;
+	   	float y = 0;
+	
+	   	if((camera.position.x+1)>CamMaxX)
+	   		x=(CamMaxX-1)-camera.position.x;
+	   	if((camera.position.x-1)<CamMinX)
+	   		x=(CamMinX+1)-camera.position.x;
+	    if((camera.position.y+1)>CamMaxY)
+	    	y=(CamMaxY-1)-camera.position.y;
+	   	if((camera.position.y-1)<CamMinY)
+	   		y=(CamMinY+1)-camera.position.y;
+	   	
+	   	camera.translate(x, y);
+	   	
+	   mod[2] -= x;
+	   mod[3] -= y;
+
+	}
+	
 	private void AgregarListener(){
 		
 		InputListener cardListener = new InputListener() {
@@ -421,31 +446,8 @@ public class StartGameScreen extends AbstractScreen{
 		slider.addListener(new ChangeListener() {
 	         @Override
 	         public void changed (ChangeEvent event, Actor actor) {
-	        	 camera.zoom = 1+slider.getValue()/100;
-	        	 CamMaxX = (1800*factorH-Width*camera.zoom)/2;
-	        	 CamMinX = -(2200*factorH-Width*camera.zoom)/2;
-	     		
-	        	 CamMaxY = (1400*factorH-Height*camera.zoom)/2-70*factorH;
-	        	 CamMinY = -(1120*factorH-Height*camera.zoom)/2-70*factorH;
-	        	 
-	        	 float x = 0;
-	     	   	float y = 0;
-	     	
-	     	   	if((camera.position.x+1)>CamMaxX)
-	     	   		x=(CamMaxX-1)-camera.position.x;
-	     	   	if((camera.position.x-1)<CamMinX)
-	     	   		x=(CamMinX+1)-camera.position.x;
-	     	    if((camera.position.y+1)>CamMaxY)
-	     	    	y=(CamMaxY-1)-camera.position.y;
-	     	   	if((camera.position.y-1)<CamMinY)
-	     	   		y=(CamMinY+1)-camera.position.y;
-	     	   	
-	     	   	camera.translate(x, y);
-	     	   	
-	     	   mod[2] -= x;
-	     	   mod[3] -= y;
-	         }
-	         
+		         updateScreen();
+	        }
 	      });
 		
 		
@@ -726,10 +728,10 @@ public class StartGameScreen extends AbstractScreen{
 			    }
 		    	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 		    		if(SIZESELECTED==2){
-		    			if(	!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado && 
-		    				!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].ocupado &&
-		    				!Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].ocupado &&
-		    				!Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].ocupado ){
+		    			if(	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].isWalkable() && 
+		    				Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].isWalkable() &&
+		    				Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].isWalkable() &&
+		    				Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].isWalkable() ){
 		    					    				
 		    				ObjectData objetodatatemp = game.mNativeFunctions.getHeroData(CardData.idobjeto);
 		    	    		Objeto objetotem = new Objeto(startgamescreen, objetodatatemp);
@@ -755,7 +757,7 @@ public class StartGameScreen extends AbstractScreen{
 		    			}
 		    		}
 		    		else{
-		    			if(!Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado){
+		    			if(Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].isWalkable()){
 		    				
 		    				ObjectData objetodatatemp = game.mNativeFunctions.getHeroData(CardData.idobjeto);
 		    	    		Objeto objetotem = new Objeto(startgamescreen, objetodatatemp);

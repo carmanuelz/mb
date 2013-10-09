@@ -4,11 +4,12 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/mythicalbattle"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="lib" path="/mythicalbattle/libs/gdx.jar" sourcepath="/mythicalbattle/libs/gdx-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/gdx-backend-android.jar" sourcepath="libs/gdx-backend-android-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/mythicalbattle/libs/tween-engine-api.jar" sourcepath="/mythicalbattle/libs/tween-engine-api-sources.jar"/>
 	<classpathentry kind="lib" path="libs/netty-3.5.9.Final.jar"/>
 	<classpathentry kind="lib" path="libs/sqldroid-0.3.0.jar"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

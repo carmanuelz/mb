@@ -17,6 +17,7 @@ public class Funciones {
 	private float dimH;
 	private float dimW;
 	private float Dmid;
+	private int Limit;
 	
 	public static final int UNSELECTED = 0;
 	public static final int SELECTED = 1;
@@ -32,9 +33,9 @@ public class Funciones {
 	
 	public Funciones(float factH, float D){
 		Dmid = D/2;
+		Limit = (int) (D - 1);
 		dimW = Dmid*100;
 		dimH = Dmid*70;
-		
 		factorH = factH;
 		Y0 = dimH*factorH;
 		X0 = -dimW*factorH;
@@ -48,10 +49,10 @@ public class Funciones {
 		aux.y =(int)((0.7*(X0-x)+y)/fichaH);
 		if(aux.y>0)
 			aux.y=0;
-		if(aux.y<-37)
-			aux.y=-37;
-		if(aux.x>37)
-			aux.x=37;
+		if(aux.y<-Limit)
+			aux.y=-Limit;
+		if(aux.x>Limit)
+			aux.x=Limit;
 		if(aux.x<0)
 			aux.x=0;
 		Vector2 posicion = new Vector2();
@@ -83,12 +84,13 @@ public class Funciones {
 			for (int i=y-rango1;i< y+rango1+1; i++)
 				for(int j=x-rango1;j<x+rango1+1;j++){
 					int valor = Math.abs(i-y)+Math.abs(j-x);
-					if(valor<=rango1 && valor>=rango2){
-						vector2 = new Vector2(j,i);
-						vector1 = SeleccionarPos(j,i);
-						List1.add(vector1);
-						List2.add(vector2);
-					}
+					if(j < Limit && j > -Limit && i < Limit && i > -Limit )
+						if(valor<=rango1 && valor>=rango2){
+							vector2 = new Vector2(j,i);
+							vector1 = SeleccionarPos(j,i);
+							List1.add(vector1);
+							List2.add(vector2);
+						}
 				}
 		}
 		else{
@@ -97,34 +99,38 @@ public class Funciones {
 				for(int j=x-rango1;j<x+rango1+1;j++){
 					int valor = Math.abs(i-y)+Math.abs(j-x);
 					if(valor<=rango1 && valor>=rango2){
-						if(!nodos[i][j].closed){
-							vector2 = new Vector2(j,i);
-							vector1 = SeleccionarPos(j,i);
-							List1.add(vector1);
-							List2.add(vector2);
-							nodos[i][j].closed = true;
-						}
-						if(!nodos[i][j+1].closed){
-							vector2 = new Vector2(j+1,i);
-							vector1 = SeleccionarPos(j+1,i);
-							List1.add(vector1);
-							List2.add(vector2);
-							nodos[i][j+1].closed = true;
-						}
-						if(!nodos[i+1][j].closed){
-							vector2 = new Vector2(j,i+1);
-							vector1 = SeleccionarPos(j,i+1);
-							List1.add(vector1);
-							List2.add(vector2);
-							nodos[i+1][j].closed = true;
-						}
-						if(!nodos[i+1][j+1].closed){
-							vector2 = new Vector2(j+1,i+1);
-							vector1 = SeleccionarPos(j+1,i+1);
-							List1.add(vector1);
-							List2.add(vector2);
-							nodos[i+1][j+1].closed = true;
-						}
+						if(j < Limit && j > 0 && i < Limit && i > 0 )
+							if(!nodos[i][j].closed){
+								vector2 = new Vector2(j,i);
+								vector1 = SeleccionarPos(j,i);
+								List1.add(vector1);
+								List2.add(vector2);
+								nodos[i][j].closed = true;
+							}
+						if(j+1 < Limit && j+1 > 0 && i < Limit && i > 0 )
+							if(!nodos[i][j+1].closed){
+								vector2 = new Vector2(j+1,i);
+								vector1 = SeleccionarPos(j+1,i);
+								List1.add(vector1);
+								List2.add(vector2);
+								nodos[i][j+1].closed = true;
+							}
+						if(j < Limit && j > 0 && i+1 < Limit && i+1 > 0 )
+							if(!nodos[i+1][j].closed){
+								vector2 = new Vector2(j,i+1);
+								vector1 = SeleccionarPos(j,i+1);
+								List1.add(vector1);
+								List2.add(vector2);
+								nodos[i+1][j].closed = true;
+							}
+						if(j+1 < Limit && j+1 > 0 && i+1 < Limit && i+1 > 0 )
+							if(!nodos[i+1][j+1].closed){
+								vector2 = new Vector2(j+1,i+1);
+								vector1 = SeleccionarPos(j+1,i+1);
+								List1.add(vector1);
+								List2.add(vector2);
+								nodos[i+1][j+1].closed = true;
+							}
 					}
 				}
 		}
@@ -250,7 +256,7 @@ public class Funciones {
 	}
 	
 	private boolean isWalkableAt2(float x,float y,Nodo[][] nodos){
-		if((x>=0 && x<38 )&&(y>=0 && y<38 )&&(x+1>=0 && x+1<38 )&&(y+1>=0 && y+1<38 ))
+		if((x>=0 && x <= Limit )&&(y >= 0 && y <= Limit )&&(x+1 >= 0 && x+1 <= Limit )&&(y+1 >= 0 && y+1 <= Limit ))
 			if(	(nodos[(int)y][(int)x].isWalkable() || nodos[(int)y][(int)x].ReflectThis) &&
 				(nodos[(int)y][(int)x+1].isWalkable() || nodos[(int)y][(int)x+1].ReflectThis) &&
 				(nodos[(int)y+1][(int)x].isWalkable() || nodos[(int)y+1][(int)x].ReflectThis) &&
@@ -373,23 +379,24 @@ public class Funciones {
 		Iterator<Vector2> iter = AlcanceHabilidad.iterator();
 		while(iter.hasNext()){
 			Vector2 posicion = iter.next();
-			if(nodos[(int)posicion.y][(int)posicion.x].ocupado){
-				if(nodos[(int)posicion.y][(int)posicion.x].Reflect)
-					posicion = nodos[(int)posicion.y][(int)posicion.x].nodoReflect;
-				if(!nodos[(int)posicion.y][(int)posicion.x].target &&(posicion.x!=NODOSELECTED.x || posicion.y!=NODOSELECTED.y)){
-					listTarget.add(posicion);
-					nodos[(int)posicion.y][(int)posicion.x].target = true;
-					if(HABILIDAD == ATFTYPE)
-						nodos[(int)posicion.y][(int)posicion.x].ficha.targetF();
-					else
-						nodos[(int)posicion.y][(int)posicion.x].ficha.target();
+			if(posicion.y < Limit && posicion.y > 0 && posicion.x < Limit && posicion.x > 0 )
+				if(nodos[(int)posicion.y][(int)posicion.x].ocupado){
+					if(nodos[(int)posicion.y][(int)posicion.x].Reflect)
+						posicion = nodos[(int)posicion.y][(int)posicion.x].nodoReflect;
+					if(!nodos[(int)posicion.y][(int)posicion.x].target &&(posicion.x!=NODOSELECTED.x || posicion.y!=NODOSELECTED.y)){
+						listTarget.add(posicion);
+						nodos[(int)posicion.y][(int)posicion.x].target = true;
+						if(HABILIDAD == ATFTYPE)
+							nodos[(int)posicion.y][(int)posicion.x].ficha.targetF();
+						else
+							nodos[(int)posicion.y][(int)posicion.x].ficha.target();
+					}
+					if(nodos[(int)posicion.y][(int)posicion.x].size==2){
+						nodos[(int)posicion.y][(int)posicion.x+1].target = true;
+						nodos[(int)posicion.y+1][(int)posicion.x].target = true;
+						nodos[(int)posicion.y+1][(int)posicion.x+1].target = true;
+					}
 				}
-				if(nodos[(int)posicion.y][(int)posicion.x].size==2){
-					nodos[(int)posicion.y][(int)posicion.x+1].target = true;
-					nodos[(int)posicion.y+1][(int)posicion.x].target = true;
-					nodos[(int)posicion.y+1][(int)posicion.x+1].target = true;
-				}
-			}
 		}
 	}
 	
@@ -399,23 +406,24 @@ public class Funciones {
 		Iterator<Vector2> iter = AlcanceHabilidad.iterator();
 		while(iter.hasNext()){
 			Vector2 posicion = iter.next();
-			if(nodos[(int)posicion.y][(int)posicion.x].ocupado){
-				if(nodos[(int)posicion.y][(int)posicion.x].Reflect)
-					posicion = nodos[(int)posicion.y][(int)posicion.x].nodoReflect;
-				if(!nodos[(int)posicion.y][(int)posicion.x].target){
-					listTarget.add(posicion);
-					nodos[(int)posicion.y][(int)posicion.x].target = true;
-					if(HABILIDAD == ATFTYPE || HABILIDAD == STFTYPE)
-						nodos[(int)posicion.y][(int)posicion.x].ficha.targetF();
-					else
-						nodos[(int)posicion.y][(int)posicion.x].ficha.target();
+			if(posicion.y < 37 && posicion.y > -37 && posicion.x < 37 && posicion.x > -37 )
+				if(nodos[(int)posicion.y][(int)posicion.x].ocupado){
+					if(nodos[(int)posicion.y][(int)posicion.x].Reflect)
+						posicion = nodos[(int)posicion.y][(int)posicion.x].nodoReflect;
+					if(!nodos[(int)posicion.y][(int)posicion.x].target){
+						listTarget.add(posicion);
+						nodos[(int)posicion.y][(int)posicion.x].target = true;
+						if(HABILIDAD == ATFTYPE || HABILIDAD == STFTYPE)
+							nodos[(int)posicion.y][(int)posicion.x].ficha.targetF();
+						else
+							nodos[(int)posicion.y][(int)posicion.x].ficha.target();
+					}
+					if(nodos[(int)posicion.y][(int)posicion.x].size==2){
+						nodos[(int)posicion.y][(int)posicion.x+1].target = true;
+						nodos[(int)posicion.y+1][(int)posicion.x].target = true;
+						nodos[(int)posicion.y+1][(int)posicion.x+1].target = true;
+					}
 				}
-				if(nodos[(int)posicion.y][(int)posicion.x].size==2){
-					nodos[(int)posicion.y][(int)posicion.x+1].target = true;
-					nodos[(int)posicion.y+1][(int)posicion.x].target = true;
-					nodos[(int)posicion.y+1][(int)posicion.x+1].target = true;
-				}
-			}
 		}
 	}
 	
