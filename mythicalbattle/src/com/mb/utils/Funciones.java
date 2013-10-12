@@ -406,7 +406,7 @@ public class Funciones {
 		Iterator<Vector2> iter = AlcanceHabilidad.iterator();
 		while(iter.hasNext()){
 			Vector2 posicion = iter.next();
-			if(posicion.y < 37 && posicion.y > -37 && posicion.x < 37 && posicion.x > -37 )
+			if(posicion.y < Limit && posicion.y > 0 && posicion.x < Limit && posicion.x > 0 )
 				if(nodos[(int)posicion.y][(int)posicion.x].ocupado){
 					if(nodos[(int)posicion.y][(int)posicion.x].Reflect)
 						posicion = nodos[(int)posicion.y][(int)posicion.x].nodoReflect;

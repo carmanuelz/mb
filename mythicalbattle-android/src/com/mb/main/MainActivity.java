@@ -42,8 +42,8 @@ import com.mb.utils.NativeFunctions;
 
 public class MainActivity extends AndroidApplication implements NativeFunctions {
 
-	private static String file_url = "http://lazonanegativa.com/mb/mythbattle.sqlite";	
-	String url = "jdbc:sqldroid:/data/data/com.me.mygdxgame/files/mythbattle.sqlite";
+	private static String file_url = "https://dl.dropboxusercontent.com/u/79250909/mythbattle.sqlite";	
+	String url = "jdbc:sqldroid:/data/data/com.mb.main/files/mythbattle.sqlite";
 	private Connection connection;
 	public RecoveryData RecoveryData;
 
@@ -148,7 +148,7 @@ public Connection getConnection() {
 		 * */
 		@Override
 		protected String doInBackground(String... f_url) {
-			filesize = Integer.parseInt(getSize());
+			filesize = 524288;//Integer.parseInt(getSize());
 			System.out.println(filesize);
 			int count;
 	        try {
