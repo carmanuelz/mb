@@ -16,7 +16,13 @@ public class MainScreen extends Game {
 	public NativeFunctions mNativeFunctions;
 	public MainScreen(NativeFunctions nativeFunctions){
 		mNativeFunctions = nativeFunctions;
-	    //mNativeFunctions.cliente();
+	    try {
+			mNativeFunctions.cliente();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("no se conecto");
+			e.printStackTrace();
+		}
 		mNativeFunctions.DownloadDB();
 		mNativeFunctions.getConnection();
 	}

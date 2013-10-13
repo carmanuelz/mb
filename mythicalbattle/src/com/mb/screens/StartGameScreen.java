@@ -90,6 +90,7 @@ public class StartGameScreen extends AbstractScreen{
 	private ImageButton Card2;
 	private ImageButton Card3;
 	private ImageButton CardMagic;
+	private ImageButton CardEquip;
 	
 	public final TweenManager tweenManager = new TweenManager();
 	
@@ -329,6 +330,7 @@ public class StartGameScreen extends AbstractScreen{
 		stage.addActor(Card2);
 		stage.addActor(Card3);
 		stage.addActor(CardMagic);
+		stage.addActor(CardEquip);
 		stage.addActor(slider);
 		
 		Tween.setWaypointsLimit(10);
@@ -394,6 +396,8 @@ public class StartGameScreen extends AbstractScreen{
 		
 		CardMagic=new ImageButton(styleButtonMagicCard);
 		CardMagic.setPosition(300, 420);
+		CardEquip=new ImageButton(styleButtonMagicCard);
+		CardEquip.setPosition(350, 420);
 	}
 	
 	private void updateScreen(){
@@ -464,12 +468,13 @@ public class StartGameScreen extends AbstractScreen{
 		CardData carddata2 = listcards.get(1);
 		CardData carddata3 = listcards.get(2);
 		CardData carddata4 = listcards.get(3);
+		CardData carddata5 = listcards.get(4);
 		
 		Card.addListener(getCardListener(carddata1));
 		Card2.addListener(getCardListener(carddata2));
 		Card3.addListener(getCardListener(carddata3));
 		CardMagic.addListener(getCardListener(carddata4));
-		
+		CardEquip.addListener(getCardListener(carddata5));
 		joystick2.addListener(cardListener);		
 		Deck.addListener(cardListener);
 		Card.addListener(cardListener);
@@ -725,52 +730,52 @@ public class StartGameScreen extends AbstractScreen{
 			    			Nodos[(int)NODOSELECTED.y][(int)NODOSELECTED.x].ficha.unselected();
 			    		Unselect();
 			            return true;
-			    }
-		    	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-		    		if(SIZESELECTED==2){
-		    			if(	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].isWalkable() && 
-		    				Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].isWalkable() &&
-		    				Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].isWalkable() &&
-		    				Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].isWalkable() ){
-		    					    				
-		    				ObjectData objetodatatemp = game.mNativeFunctions.getHeroData(CardData.idobjeto);
-		    	    		Objeto objetotem = new Objeto(startgamescreen, objetodatatemp);
-		    	    		objetotem.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
-			            	
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=objetotem;
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].size = objetotem.size;
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;
-			            	
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado = true;
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].ocupado = true;
-			            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].ocupado = true;
-			            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].ocupado = true;
-			            	
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].Reflect = true;
-			            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].Reflect = true;
-			            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].Reflect = true;
-			            	
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].nodoReflect = TempPosicionMat;
-			            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].nodoReflect = TempPosicionMat;
-			            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].nodoReflect =TempPosicionMat;
-			            	indexFicha+=1;
-		    			}
-		    		}
-		    		else{
-		    			if(Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].isWalkable()){
-		    				
-		    				ObjectData objetodatatemp = game.mNativeFunctions.getHeroData(CardData.idobjeto);
-		    	    		Objeto objetotem = new Objeto(startgamescreen, objetodatatemp);
-		    	    		objetotem.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
-		    	    		
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=objetotem;
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;
-			            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado = true;
-			            	indexFicha+=1;
-				            }
-						}
-		            desableDragged();
 				    }
+			    	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+			    		if(SIZESELECTED==2){
+			    			if(	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].isWalkable() && 
+			    				Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].isWalkable() &&
+			    				Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].isWalkable() &&
+			    				Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].isWalkable() ){
+			    					    				
+			    				ObjectData objetodatatemp = game.mNativeFunctions.getHeroData(CardData.idobjeto);
+			    	    		Objeto objetotem = new Objeto(startgamescreen, objetodatatemp);
+			    	    		objetotem.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
+				            	
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=objetotem;
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].size = objetotem.size;
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;
+				            	
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado = true;
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].ocupado = true;
+				            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].ocupado = true;
+				            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].ocupado = true;
+				            	
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].Reflect = true;
+				            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].Reflect = true;
+				            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].Reflect = true;
+				            	
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x+1].nodoReflect = TempPosicionMat;
+				            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x].nodoReflect = TempPosicionMat;
+				            	Nodos[(int)TempPosicionMat.y+1][(int)TempPosicionMat.x+1].nodoReflect =TempPosicionMat;
+				            	indexFicha+=1;
+			    			}
+			    		}
+			    		else{
+			    			if(Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].isWalkable()){
+			    				
+			    				ObjectData objetodatatemp = game.mNativeFunctions.getHeroData(CardData.idobjeto);
+			    	    		Objeto objetotem = new Objeto(startgamescreen, objetodatatemp);
+			    	    		objetotem.setPositionFicha(TempPosicionMat.x,TempPosicionMat.y);
+			    	    		
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha=objetotem;
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ficha.IdFicha = indexFicha;
+				            	Nodos[(int)TempPosicionMat.y][(int)TempPosicionMat.x].ocupado = true;
+				            	indexFicha+=1;
+					            }
+							}
+			            desableDragged();
+					    }
 				};
 				return ObjectListener;
 				
@@ -800,6 +805,31 @@ public class StartGameScreen extends AbstractScreen{
 				};
 				return ObjectListener;
 				
+			case EQUIPTYPE:
+				ObjectListener = new InputListener() {
+			    	public boolean touchDown (InputEvent event, float x, float y, int pointer, int button){
+			    		HABILIDAD = ATFTYPE;
+			    		SPELLR = 0;
+			    		atdragged=true;
+			    		spelldragged = true;
+			    		Unselect();
+				        return true;
+				    }
+			    	public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+			    		if(atdragged){
+							atdragged=false;
+							spelldragged = false;
+							Iterator<Vector2> iter = listTarget.iterator();
+							while(iter.hasNext()){
+								Vector2 item = iter.next();
+								Nodos[(int)item.y][(int)item.x].ficha.AnimHabilidad();
+						}
+							
+							funciones.Untarget(listTarget,HABILIDAD,Nodos);
+						}
+			    	}
+				};
+				return ObjectListener;
 			default :
 				return null;
 		}
@@ -852,10 +882,16 @@ public class StartGameScreen extends AbstractScreen{
 	    cd4.idobjeto = 1;
 	    cd4.tipo = 3;
 	    
+	    CardData cd5 = new CardData();
+	    cd5.faccion = 1;
+	    cd5.idobjeto = 1;
+	    cd5.tipo = 4;
+	    
 	    listcards.add(cd1);
 	    listcards.add(cd2);
 	    listcards.add(cd3);
 	    listcards.add(cd4);
+	    listcards.add(cd5);
 	    
 	    System.out.println(json2.toJson(listcards));
 		return listcards;

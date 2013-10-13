@@ -19,13 +19,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jboss.netty.channel.ChannelEvent;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelState;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInboundHandlerAdapter;
 
 /**
  * Handler implementation for the object echo client.  It initiates the
@@ -37,62 +32,43 @@ import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
  *
  * @version $Rev: 2121 $, $Date: 2010-02-02 09:38:07 +0900 (Tue, 02 Feb 2010) $
  */
-public class ObjectEchoClientHandler extends SimpleChannelUpstreamHandler {
+public class ObjectEchoClientHandler extends ChannelInboundHandlerAdapter {
 
     private static final Logger logger = Logger.getLogger(
             ObjectEchoClientHandler.class.getName());
 
     private final String firstMessage;
-    private final AtomicLong transferredMessages = new AtomicLong();
 
     /**
      * Creates a client-side handler.
      */
-    public ObjectEchoClientHandler() {
-        
+    public ObjectEchoClientHandler() {        
         firstMessage = "hola";
     }
 
-    public long getTransferredMessages() {
-        return transferredMessages.get();
-    }
-
     @Override
-    public void handleUpstream(
-            ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
-        if (e instanceof ChannelStateEvent &&
-            ((ChannelStateEvent) e).getState() != ChannelState.INTEREST_OPS) {
-        	clog(e.toString());
-        }
-        super.handleUpstream(ctx, e);
-    }
-
-    @Override
-    public void channelConnected(
-            ChannelHandlerContext ctx, ChannelStateEvent e) {
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
         // Send the first message if this handler is a client-side handler.
-        e.getChannel().write(firstMessage);
+        ctx.writeAndFlush(firstMessage);
     }
 
     @Override
-    public void messageReceived(
-            ChannelHandlerContext ctx, MessageEvent e) {
-        // Echo back the received object to the client.
-        transferredMessages.incrementAndGet();
-        //e.getChannel().write(e.getMessage());
-        clog((String)e.getMessage());
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        // Echo back the received object to the server.
+        //ctx.write(msg);
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.flush();
     }
 
     @Override
     public void exceptionCaught(
-            ChannelHandlerContext ctx, ExceptionEvent e) {
+            ChannelHandlerContext ctx, Throwable cause) throws Exception {
         logger.log(
                 Level.WARNING,
-                "Unexpected exception from downstream.",
-                e.getCause());
-        e.getChannel().close();
-    }
-    public static void clog(Object msg) {
-    	System.out.println("[Client]:" + msg);
+                "Unexpected exception from downstream.", cause);
+        ctx.close();
     }
 }
