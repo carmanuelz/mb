@@ -1,27 +1,26 @@
 package com.mb.main;
 
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.net.URL;
 import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.concurrent.Executors;
-
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
-import org.jboss.netty.handler.codec.serialization.ClassResolvers;
-import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
-import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -36,6 +35,7 @@ import com.mb.data.EquipData;
 import com.mb.data.ObjectData;
 import com.mb.data.RecoveryData;
 import com.mb.data.SpellData;
+import com.mb.net.Cliente;
 import com.mb.net.ObjectEchoClientHandler;
 import com.mb.screens.MainScreen;
 import com.mb.utils.NativeFunctions;
@@ -49,6 +49,8 @@ public class MainActivity extends AndroidApplication implements NativeFunctions 
 
     public int filesize = 0;
     public int percent = 0;
+
+	Cliente cliente;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,28 +60,34 @@ public class MainActivity extends AndroidApplication implements NativeFunctions 
         cfg.useGL20 = true;        
         initialize(new MainScreen(this), cfg);
     }
-public void cliente(){
+    
+    @Override
+	public void cliente(){   
+    	EventLoopGroup group = new NioEventLoopGroup();
+        try {
+            Bootstrap b = new Bootstrap();
+            b.group(group)
+             .channel(NioSocketChannel.class)
+             .handler(new ChannelInitializer<SocketChannel>() {
+                @Override
+                public void initChannel(SocketChannel ch) throws Exception {
+                    ch.pipeline().addLast(
+                            new ObjectEncoder(),
+                            new ObjectDecoder(ClassResolvers.cacheDisabled(getClass().getClassLoader())),
+                            new ObjectEchoClientHandler());
+                }
+             });
 
-    	
-    	ClientBootstrap bootstrap = new ClientBootstrap(
-                new NioClientSocketChannelFactory(
-                		Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()));
-
-        // Set up the pipeline factory.
-        bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-            public ChannelPipeline getPipeline() throws Exception {
-                return Channels.pipeline(
-                        new ObjectEncoder(),
-                        new ObjectDecoder(ClassResolvers.cacheDisabled(getClass().getClassLoader())),
-                        new ObjectEchoClientHandler());
-            }
-        });
-
-        // Start the connection attempt.
-        bootstrap.connect(new InetSocketAddress("http://lazonanegativa.com/", 8080));
-    	//System.out.println("hola");
-    	
+            // Start the connection attempt.
+            try {
+				b.connect("192.168.1.13", 8080).sync().channel();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        } finally {
+            group.shutdownGracefully();
+        }	
     }
 
 @Override

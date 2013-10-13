@@ -1,21 +1,9 @@
 package com.mb.main;
 
-import java.net.InetSocketAddress;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.concurrent.Executors;
 
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
-import org.jboss.netty.handler.codec.serialization.ClassResolvers;
-import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
-import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -25,7 +13,7 @@ import com.mb.data.EquipData;
 import com.mb.data.ObjectData;
 import com.mb.data.SpellData;
 import com.mb.data.CardData; 
-import com.mb.net.ObjectEchoClientHandler;
+import com.mb.net.Cliente;
 import com.mb.screens.MainScreen;
 import com.mb.utils.NativeFunctions;
 
@@ -35,6 +23,7 @@ public class Main implements NativeFunctions {
 	private Connection connection = null;
 	public RecoveryData RecoveryData;
 	public int percent = 100;
+	Cliente cliente;
 
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
@@ -46,25 +35,13 @@ public class Main implements NativeFunctions {
 		new LwjglApplication(new MainScreen(game), cfg);
 	}
 	@Override
-	public void cliente(){
-    	
-    	ClientBootstrap bootstrap = new ClientBootstrap(
-                new NioClientSocketChannelFactory(
-                        Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()));
-
-        // Set up the pipeline factory.
-        bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-            public ChannelPipeline getPipeline() throws Exception {
-                return Channels.pipeline(
-                        new ObjectEncoder(),
-                        new ObjectDecoder(ClassResolvers.cacheDisabled(getClass().getClassLoader())),
-                        new ObjectEchoClientHandler());
-            }
-        });
-
-        // Start the connection attempt.
-        bootstrap.connect(new InetSocketAddress("localhost", 8080));
+	public void cliente(){   
+        try {
+			cliente = new Cliente ("localhost", 8080);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	
     }
 	@Override
