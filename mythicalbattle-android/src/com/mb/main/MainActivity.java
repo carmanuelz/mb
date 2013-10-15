@@ -63,31 +63,12 @@ public class MainActivity extends AndroidApplication implements NativeFunctions 
     
     @Override
 	public void cliente(){   
-    	EventLoopGroup group = new NioEventLoopGroup();
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-             .channel(NioSocketChannel.class)
-             .handler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    ch.pipeline().addLast(
-                            new ObjectEncoder(),
-                            new ObjectDecoder(ClassResolvers.cacheDisabled(getClass().getClassLoader())),
-                            new ObjectEchoClientHandler());
-                }
-             });
-
-            // Start the connection attempt.
-            try {
-				b.connect("192.168.1.13", 8080).sync().channel();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        } finally {
-            group.shutdownGracefully();
-        }	
+    	 try {
+ 			cliente = new Cliente ("192.168.1.13", 8080);
+ 		} catch (Exception e) {
+ 			// TODO Auto-generated catch block
+ 			e.printStackTrace();
+ 		}
     }
 
 @Override

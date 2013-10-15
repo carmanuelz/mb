@@ -37,7 +37,7 @@ public class Cliente {
              });
 
             // Start the connection attempt.
-            b.connect(host, port).sync().channel().closeFuture().sync();
+            b.connect(host, port).sync().channel();//.closeFuture().sync();
         } finally {
             group.shutdownGracefully();
         }
